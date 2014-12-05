@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width initial-scale=1">
+
+  <title>Working with Laravel 4 and Wordpress together | Junior Grossi</title>
+  <meta name="description" content="Currently I am working on a project where I had to make some choices about technologies and how work with them together. First this project will be developed...">
+
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="canonical" href="http://grossi.io/2014/working-with-laravel-4-and-wordpress-together">
+  <link rel="alternate" type="application/atom+xml" title="Junior Grossi" href="http://grossi.io/feed.xml" />
+
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-24490124-1', 'auto');
+    ga('send', 'pageview');
+  </script>
+  
+</head>
+
+
+  <body>
+
+    <header class="site-header">
+
+  <div class="wrapper">
+
+    <a class="site-title" href="/">Junior Grossi </a>
+
+    <nav class="site-nav">
+      <a href="#" class="menu-icon">
+        <svg viewBox="0 0 18 15">
+          <path fill="#424242" d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.031C17.335,0,18,0.665,18,1.484L18,1.484z"/>
+          <path fill="#424242" d="M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0c0-0.82,0.665-1.484,1.484-1.484 h15.031C17.335,6.031,18,6.696,18,7.516L18,7.516z"/>
+          <path fill="#424242" d="M18,13.516C18,14.335,17.335,15,16.516,15H1.484C0.665,15,0,14.335,0,13.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.031C17.335,12.031,18,12.696,18,13.516L18,13.516z"/>
+        </svg>
+      </a>
+
+      <div class="trigger">
+        
+          
+          <a class="page-link" href="/about/">About</a>
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+      </div>
+    </nav>
+
+  </div>
+
+</header>
+
+
+    <div class="page-content">
+      <div class="wrapper">
+        <div class="post">
+
+  <header class="post-header">
+    <h1 class="post-title">Working with Laravel 4 and Wordpress together</h1>
+    <p class="post-meta">Apr 26, 2014</p>
+  </header>
+
+  <article class="post-content">
+    <p>Hi everybody!</p>
+<p><a href="#using-wordpress-corcel">Updated May 11th 2014</a></p>
+<p>Currently I am working on a project where I had to make some choices about technologies and how work with them together. First this project will be developed using Wordpress only. It's a College Group site, where we had to work with 13 schools around the world and each one must has the control of your own content.</p>
+<p>This could be made with Wordpress, but I think when the site is not so small maybe you can use another CMS or Framework, because I particularly prefer to work with MVC. So because some decisions inside the company we decided to use Wordpress Admin Panel, that is a very good, use its architecture and its database. So Wordpress will be used to the application back-end, with user control, user permission, etc.</p>
+<p>To the front-end we decided to work with Laravel. To query information from the Wordpress database we've used the wordpress functions inside Laravel, so it's much better to work with a MVC Wordpress.</p>
+
+<h2>Installing Wordpress and Laravel</h2>
+<p>Let's install Laravel first using Composer. This will take some while.</p>
+
+<div class="highlight"><pre><code class="language-bash" data-lang="bash">composer create-project laravel/laravel</code></pre></div>
+
+<p>So we have now our Laravel folder structure with everything installed. Now let's install a fresh installation of Wordpress inside Laravel. Here you have to options:</p>
+<ol>
+<li>Install Wordpress as a sub-dir of <code>public</code> Laravel folder, like <code>/public/wordpress</code>. So to access your Wordpress Admin you have to go to something like <code>http://example.com/wordpress/wp-admin</code>.</li>
+<li>Install Wordpress as a sub-dir of the Laravel's root, like <code>/wordpress</code>. So you will have <code>/app</code> and <code>/wordpress</code> in the same position. For this you have to create another VirtualHost to point to Wordpress installation. You can setup a subdomain lik <code>wp.example.com</code> and poit it to <code>/laravel/folder/wordpress</code>. This way you can access the Admin going to <code>http://wp.example.com/wp-admin</code>.</li>
+</ol>
+<h3>Removing the Wordpress front-end</h3>
+<p>For security issues go to <code>/wordpress/index.php</code> file and put this first, to redirect to the Admin login page:</p>
+
+<div class="highlight"><pre><code class="language-php" data-lang="php"><span class="nb">header</span><span class="p">(</span><span class="s2">&quot;Location: ./wp-admin&quot;</span><span class="p">);</span>
+<span class="k">exit</span><span class="p">();</span></code></pre></div>
+
+<p>So, when you visit <code>http://wp.example.com</code> or <code>http://example.com/wordpress</code> you are redirected to the Wordpress Admin login page.</p>
+<h2>Connect Laravel to Wordpress</h2>
+<p>Now we have to include Wordpress inside Laravel. It's easier than you think. Just edit the <code>public/index.php</code> Laravel file and include the follow <strong>before anything</strong>:</p>
+
+<div class="highlight"><pre><code class="language-php" data-lang="php"><span class="cm">/*</span>
+<span class="cm">|--------------------------------------------------------------------------</span>
+<span class="cm">| Wordpress</span>
+<span class="cm">|--------------------------------------------------------------------------</span>
+<span class="cm">|</span>
+<span class="cm">| Integrate Wordpress with Laravel core</span>
+<span class="cm">|</span>
+<span class="cm">*/</span>
+
+<span class="nb">define</span><span class="p">(</span><span class="s1">&#39;WP_USE_THEMES&#39;</span><span class="p">,</span> <span class="k">false</span><span class="p">);</span>
+<span class="k">require</span> <span class="nx">__DIR__</span><span class="o">.</span><span class="s1">&#39;/../wordpress/wp-blog-header.php&#39;</span><span class="p">;</span></code></pre></div>
+
+<p>Now you can use Wordpress functions with Laravel. Yes, like a piece of cake!!!</p>
+<h3>Querying Posts</h3>
+<p>Let's suppose you need to get some posts and show to the view file:</p>
+
+<div class="highlight"><pre><code class="language-php" data-lang="php"><span class="c1">// app/controllers/SchoolController.php</span>
+
+<span class="k">class</span> <span class="nc">SchoolController</span> <span class="k">extends</span> <span class="nx">BaseController</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="k">function</span> <span class="nf">index</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="nv">$query</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">WP_Query</span><span class="p">(</span><span class="k">array</span><span class="p">(</span>
+            <span class="s1">&#39;post_type&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;school&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;posts_per_page&#39;</span> <span class="o">=&gt;</span> <span class="mi">20</span><span class="p">,</span>
+            <span class="s1">&#39;order&#39;</span> <span class="o">=&gt;</span> <span class="nx">ASC</span><span class="p">,</span>
+            <span class="s1">&#39;orderby&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;post_title&#39;</span><span class="p">,</span>
+        <span class="p">));</span>
+
+        <span class="nv">$posts</span> <span class="o">=</span> <span class="nv">$query</span><span class="o">-&gt;</span><span class="na">get_posts</span><span class="p">();</span>
+
+        <span class="k">return</span> <span class="nx">View</span><span class="o">::</span><span class="na">make</span><span class="p">(</span><span class="s1">&#39;school.index&#39;</span><span class="p">)</span><span class="o">-&gt;</span><span class="na">with</span><span class="p">(</span><span class="s1">&#39;schools&#39;</span><span class="p">,</span> <span class="nv">$posts</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span></code></pre></div>
+
+<p>Maybe you need some Wordpress features but you have to use it from your theme's folder. If you don't know how to create a Wordpress Theme, check <a href="http://grossi.io/2012/creating-your-first-wordpress-theme-part-1/">this post</a>.</p>
+<p>For example, in my project I had to create a "About" page for each school. So I create pages with taxonomies called "SchoolName". After, I create a page with the "About" title and select the "São Paulo's School" term in my taxonomy "SchoolName". But all schools will have the same page structure, right? So I have to create a template page inside my Wordpress theme's folder. This way I can have custom fields to this page and all schools will have the About page looking like the same.</p>
+<p>So, create a custom theme, adding a <code>style.css</code> file and a <code>index.php</code> file and activating it from the Wordpress panel. After that create a new file called <code>about.php</code>. Inside it put:</p>
+
+<div class="highlight"><pre><code class="language-php" data-lang="php"><span class="o">&lt;?</span><span class="nx">php</span> <span class="cm">/* Template Name: About page */</span> <span class="cp">?&gt;</span><span class="x"></span></code></pre></div>
+
+<p>So I created a Template called "About page" and when creating the "About" page I select the "About page" template name too. Now my page has a custom taxonomy and a template name.</p>
+<p>Now let's query some pages.</p>
+<h3>Getting Pages</h3>
+<p>Now if you have to get information about some page, like "About" page. Remember here that the permalinks from Wordpress won't be used. We are going to use only the Laravel routes and URL's. We are using Wordpress only to fill the database and use its Admin Panel.</p>
+
+<div class="highlight"><pre><code class="language-php" data-lang="php"><span class="sd">/**</span>
+<span class="sd"> * Getting page from Wordpress</span>
+<span class="sd"> */</span>
+
+<span class="c1">// Getting page by ID</span>
+<span class="nv">$page</span> <span class="o">=</span> <span class="nx">get_post</span><span class="p">(</span><span class="mi">1234</span><span class="p">);</span>
+
+<span class="c1">// Getting page by slug</span>
+<span class="nv">$query</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">WP_Query</span><span class="p">(</span><span class="k">array</span><span class="p">(</span>
+    <span class="s1">&#39;post_type&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;page&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;posts_per_page&#39;</span> <span class="o">=&gt;</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="s1">&#39;name&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;about&#39;</span><span class="p">,</span> <span class="c1">// here the &#39;about&#39; is the page slug you stored in wordpress when creating the page</span>
+<span class="p">));</span>
+<span class="nv">$page</span> <span class="o">=</span> <span class="nb">array_shift</span><span class="p">(</span><span class="nv">$query</span><span class="o">-&gt;</span><span class="na">get_posts</span><span class="p">());</span> <span class="c1">// first post returned</span>
+
+<span class="c1">// Getting page by template name</span>
+<span class="nv">$templateFileName</span> <span class="o">=</span> <span class="s1">&#39;about.php&#39;</span><span class="p">;</span> <span class="c1">// here you must use the PHP FILE we&#39;ve created in the theme folder</span>
+<span class="nv">$query</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">WP_Query</span><span class="p">(</span><span class="k">array</span><span class="p">(</span>
+    <span class="s1">&#39;post_type&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;page&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;my-taxonomy-name-here&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;my-term-slug-here&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;posts_per_page&#39;</span> <span class="o">=&gt;</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="s1">&#39;meta_key&#39;</span> <span class="o">=&gt;</span> <span class="s1">&#39;_wp_page_template&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;meta_value&#39;</span> <span class="o">=&gt;</span> <span class="nv">$templateFileName</span><span class="p">,</span>
+<span class="p">));</span>
+<span class="nv">$page</span> <span class="o">=</span> <span class="nb">array_shift</span><span class="p">(</span><span class="nv">$query</span><span class="o">-&gt;</span><span class="na">get_posts</span><span class="p">());</span></code></pre></div>
+
+<p>So, that's it. Now you can use the power of Laravel with the facilities of Wordpress. So, if you're creating a website and need more organisation to your files you have use both to make your life easier.</p>
+<p>You can too use custom database tables to work only with Laravel, using Models, etc. You can join both worlds and have a better final result.</p>
+<h1 id="using-wordpress-corcel">Using Wordpress Corcel</h1>
+<p>Some time ago I started to create a project based on Eloquent ORM (from Laravel) and Wordpress. The project is hosted at Github and you can <a href="https://github.com/jgrossi/corcel">get more info here</a>.</p>
+<p>You can install it using Composer. Just add <code>jgrossi/corcel</code> in your <code>composer.json</code> file and be happy.</p>
+<p>There are much work to do but currently you can use some cool features, like:</p>
+<h2>Getting posts</h2>
+
+<div class="highlight"><pre><code class="language-php" data-lang="php"><span class="c1">// All published posts</span>
+<span class="nv">$posts</span> <span class="o">=</span> <span class="nx">Post</span><span class="o">::</span><span class="na">published</span><span class="p">()</span><span class="o">-&gt;</span><span class="na">get</span><span class="p">();</span>
+<span class="nv">$posts</span> <span class="o">=</span> <span class="nx">Post</span><span class="o">::</span><span class="na">status</span><span class="p">(</span><span class="s1">&#39;publish&#39;</span><span class="p">)</span><span class="o">-&gt;</span><span class="na">get</span><span class="p">();</span>
+
+<span class="c1">// A specific post</span>
+<span class="nv">$post</span> <span class="o">=</span> <span class="nx">Post</span><span class="o">::</span><span class="na">find</span><span class="p">(</span><span class="mi">31</span><span class="p">);</span>
+<span class="k">echo</span> <span class="nv">$post</span><span class="o">-&gt;</span><span class="na">post_title</span><span class="p">;</span></code></pre></div>
+
+<h2>Working with custom post types</h2>
+
+<div class="highlight"><pre><code class="language-php" data-lang="php"><span class="c1">// using type() method</span>
+<span class="nv">$videos</span> <span class="o">=</span> <span class="nx">Post</span><span class="o">::</span><span class="na">type</span><span class="p">(</span><span class="s1">&#39;video&#39;</span><span class="p">)</span><span class="o">-&gt;</span><span class="na">status</span><span class="p">(</span><span class="s1">&#39;publish&#39;</span><span class="p">)</span><span class="o">-&gt;</span><span class="na">get</span><span class="p">();</span>
+
+<span class="c1">// using your own class</span>
+<span class="k">class</span> <span class="nc">Video</span> <span class="k">extends</span> <span class="nx">Corcel\Post</span>
+<span class="p">{</span>
+    <span class="k">protected</span> <span class="nv">$postType</span> <span class="o">=</span> <span class="s1">&#39;video&#39;</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="nv">$videos</span> <span class="o">=</span> <span class="nx">Video</span><span class="o">::</span><span class="na">status</span><span class="p">(</span><span class="s1">&#39;publish&#39;</span><span class="p">)</span><span class="o">-&gt;</span><span class="na">get</span><span class="p">();</span></code></pre></div>
+
+<h2>Custom post type and custom fields (meta data)</h2>
+
+<div class="highlight"><pre><code class="language-php" data-lang="php"><span class="c1">// Get 3 posts with custom post type (store) and show its title</span>
+<span class="nv">$stores</span> <span class="o">=</span> <span class="nx">Post</span><span class="o">::</span><span class="na">type</span><span class="p">(</span><span class="s1">&#39;store&#39;</span><span class="p">)</span><span class="o">-&gt;</span><span class="na">status</span><span class="p">(</span><span class="s1">&#39;publish&#39;</span><span class="p">)</span><span class="o">-&gt;</span><span class="na">take</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span><span class="o">-&gt;</span><span class="na">get</span><span class="p">();</span>
+<span class="k">foreach</span> <span class="p">(</span><span class="nv">$stores</span> <span class="k">as</span> <span class="nv">$store</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nv">$storeAddress</span> <span class="o">=</span> <span class="nv">$store</span><span class="o">-&gt;</span><span class="na">address</span><span class="p">;</span>
+<span class="p">}</span></code></pre></div>
+
+<h2>Pages</h2>
+
+<div class="highlight"><pre><code class="language-php" data-lang="php"><span class="c1">// Find a page by slug</span>
+<span class="nv">$page</span> <span class="o">=</span> <span class="nx">Page</span><span class="o">::</span><span class="na">slug</span><span class="p">(</span><span class="s1">&#39;about&#39;</span><span class="p">)</span><span class="o">-&gt;</span><span class="na">first</span><span class="p">();</span> <span class="c1">// OR</span>
+<span class="nv">$page</span> <span class="o">=</span> <span class="nx">Post</span><span class="o">::</span><span class="na">type</span><span class="p">(</span><span class="s1">&#39;page&#39;</span><span class="p">)</span><span class="o">-&gt;</span><span class="na">slug</span><span class="p">(</span><span class="s1">&#39;about&#39;</span><span class="p">)</span><span class="o">-&gt;</span><span class="na">first</span><span class="p">();</span>
+<span class="k">echo</span> <span class="nv">$page</span><span class="o">-&gt;</span><span class="na">post_title</span><span class="p">;</span></code></pre></div>
+
+<p>If you want to contribute with this project you're very welcome. Ideas are welcome too.</p>
+<p>Thank you for reading.</p>
+
+  </article>
+
+  
+  <div class="disqus">
+    <div id="disqus_thread"></div>
+    <script type="text/javascript">
+        /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+        var disqus_shortname = 'grossi-io'; // required: replace example with your forum shortname
+
+        /* * * DON'T EDIT BELOW THIS LINE * * */
+        (function() {
+            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  </div>
+  
+
+</div>
+
+      </div>
+    </div>
+
+    <footer class="site-footer">
+
+  <div class="wrapper">
+
+    <!-- <h2 class="footer-heading">Junior Grossi</h2> -->
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col  footer-col-1">
+        <p>
+          <a href="http://grossi.io">
+            <img src="http://www.gravatar.com/avatar/7bb3a66a199daec275d5ad339724c754.png?s=100" alt="Junior Grossi">
+          </a>
+        </p>
+        <ul class="contact-list">
+          <li>Junior Grossi</li>
+          <li><a href="mailto:juniorgro@gmail.com">juniorgro@gmail.com</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col  footer-col-2">
+        <ul class="social-media-list">
+          
+          <li>
+            <a href="https://github.com/jgrossi">
+              <span class="icon  icon--github">
+                <svg viewBox="0 0 16 16">
+                  <path fill="#828282" d="M7.999,0.431c-4.285,0-7.76,3.474-7.76,7.761 c0,3.428,2.223,6.337,5.307,7.363c0.388,0.071,0.53-0.168,0.53-0.374c0-0.184-0.007-0.672-0.01-1.32 c-2.159,0.469-2.614-1.04-2.614-1.04c-0.353-0.896-0.862-1.135-0.862-1.135c-0.705-0.481,0.053-0.472,0.053-0.472 c0.779,0.055,1.189,0.8,1.189,0.8c0.692,1.186,1.816,0.843,2.258,0.645c0.071-0.502,0.271-0.843,0.493-1.037 C4.86,11.425,3.049,10.76,3.049,7.786c0-0.847,0.302-1.54,0.799-2.082C3.768,5.507,3.501,4.718,3.924,3.65 c0,0,0.652-0.209,2.134,0.796C6.677,4.273,7.34,4.187,8,4.184c0.659,0.003,1.323,0.089,1.943,0.261 c1.482-1.004,2.132-0.796,2.132-0.796c0.423,1.068,0.157,1.857,0.077,2.054c0.497,0.542,0.798,1.235,0.798,2.082 c0,2.981-1.814,3.637-3.543,3.829c0.279,0.24,0.527,0.713,0.527,1.437c0,1.037-0.01,1.874-0.01,2.129 c0,0.208,0.14,0.449,0.534,0.373c3.081-1.028,5.302-3.935,5.302-7.362C15.76,3.906,12.285,0.431,7.999,0.431z"/>
+                </svg>
+              </span>
+
+              <span class="username">jgrossi</span>
+            </a>
+          </li>
+          
+
+          
+          <li>
+            <a href="https://twitter.com/junior_grossi">
+              <span class="icon  icon--twitter">
+                <svg viewBox="0 0 16 16">
+                  <path fill="#828282" d="M15.969,3.058c-0.586,0.26-1.217,0.436-1.878,0.515c0.675-0.405,1.194-1.045,1.438-1.809
+                  c-0.632,0.375-1.332,0.647-2.076,0.793c-0.596-0.636-1.446-1.033-2.387-1.033c-1.806,0-3.27,1.464-3.27,3.27 c0,0.256,0.029,0.506,0.085,0.745C5.163,5.404,2.753,4.102,1.14,2.124C0.859,2.607,0.698,3.168,0.698,3.767 c0,1.134,0.577,2.135,1.455,2.722C1.616,6.472,1.112,6.325,0.671,6.08c0,0.014,0,0.027,0,0.041c0,1.584,1.127,2.906,2.623,3.206 C3.02,9.402,2.731,9.442,2.433,9.442c-0.211,0-0.416-0.021-0.615-0.059c0.416,1.299,1.624,2.245,3.055,2.271 c-1.119,0.877-2.529,1.4-4.061,1.4c-0.264,0-0.524-0.015-0.78-0.046c1.447,0.928,3.166,1.469,5.013,1.469 c6.015,0,9.304-4.983,9.304-9.304c0-0.142-0.003-0.283-0.009-0.423C14.976,4.29,15.531,3.714,15.969,3.058z"/>
+                </svg>
+              </span>
+
+              <span class="username">junior_grossi</span>
+            </a>
+          </li>
+          
+        </ul>
+      </div>
+
+      <div class="footer-col  footer-col-3">
+        <p class="text">This is my blog about web development in general. I write about PHP (Wordpress, Laravel, etc), Ruby (Rails, Jekyll), NodeJS (Socket) and more. Be welcome and let your comment :-)
+</p>
+      </div>
+    </div>
+
+  </div>
+
+</footer>
+
+
+  </body>
+
+</html>

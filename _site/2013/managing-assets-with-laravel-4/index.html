@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width initial-scale=1">
+
+  <title>Managing assets with Laravel 4 | Junior Grossi</title>
+  <meta name="description" content="Generally assets are stored in your public directory, right? They are public, so anyone can get access to them. But nowadays the performance is a very import...">
+
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="canonical" href="http://grossi.io/2013/managing-assets-with-laravel-4">
+  <link rel="alternate" type="application/atom+xml" title="Junior Grossi" href="http://grossi.io/feed.xml" />
+
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-24490124-1', 'auto');
+    ga('send', 'pageview');
+  </script>
+  
+</head>
+
+
+  <body>
+
+    <header class="site-header">
+
+  <div class="wrapper">
+
+    <a class="site-title" href="/">Junior Grossi </a>
+
+    <nav class="site-nav">
+      <a href="#" class="menu-icon">
+        <svg viewBox="0 0 18 15">
+          <path fill="#424242" d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.031C17.335,0,18,0.665,18,1.484L18,1.484z"/>
+          <path fill="#424242" d="M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0c0-0.82,0.665-1.484,1.484-1.484 h15.031C17.335,6.031,18,6.696,18,7.516L18,7.516z"/>
+          <path fill="#424242" d="M18,13.516C18,14.335,17.335,15,16.516,15H1.484C0.665,15,0,14.335,0,13.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.031C17.335,12.031,18,12.696,18,13.516L18,13.516z"/>
+        </svg>
+      </a>
+
+      <div class="trigger">
+        
+          
+          <a class="page-link" href="/about/">About</a>
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+      </div>
+    </nav>
+
+  </div>
+
+</header>
+
+
+    <div class="page-content">
+      <div class="wrapper">
+        <div class="post">
+
+  <header class="post-header">
+    <h1 class="post-title">Managing assets with Laravel 4</h1>
+    <p class="post-meta">Nov 4, 2013</p>
+  </header>
+
+  <article class="post-content">
+    <p>Generally assets are stored in your public directory, right? They are public, so anyone can get access to them. But nowadays the performance is a very important factor when deploying a new app. I strongly recommend you to minify and cache your assets, like CSS files, Javascript files and Images.</p>
+<p>If you are using 11 javascript files in your app you don't have to make 11 requests on the server, one per JS files. You can easily join all files and minify them, so you will have just one minified file. This is easy to do using Laravel 4! I've found four Laravel 4 assets managers:</p>
+<ul>
+<li><a href="http://github.com/codesleeve/asset-pipeline">codesleeve/asset-pipeline:</a> <strong>My choice!</strong> It is easy to understand and to work with </li>
+<li><a href="http://github.com/jasonlewis/basset">jasonlewis/basset:</a> Very good library created by Jason Lewis </li>
+<li><a href="http://github.com/teepluss/asset">teepluss/asset:</a> Based on the Laravel 3 Asset class. It does not minify or join your files. </li>
+<li><a href="http://github.com/way/guard-laravel">way/guard-laravel:</a> A very good package but you must have Ruby installed </li>
+</ul>
+<p>We will work with <a href="http://github.com/codesleeve/asset-pipeline">codesleeve/asset-pipeline</a> package. It's easy to use and simple to understand.</p>
+<p><a id="more"></a><a id="more-749"></a></p>
+<h2>Installation</h2>
+<p>Let's suppose you already have a Laravel 4 working. First, using Composer, you have to install the package. So, open your <code>composer.json</code> and add the package information to install it:</p>
+
+<div class="highlight"><pre><code class="language-php" data-lang="php"><span class="p">{</span> 
+    <span class="o">...</span> 
+    <span class="s2">&quot;require&quot;</span><span class="o">:</span> <span class="p">{</span> 
+        <span class="s2">&quot;laravel/framework&quot;</span><span class="o">:</span> <span class="s2">&quot;4.0.*&quot;</span><span class="p">,</span> 
+        <span class="s2">&quot;codesleeve/asset-pipeline&quot;</span><span class="o">:</span> <span class="s2">&quot;dev-master&quot;</span> 
+    <span class="p">},</span> 
+    <span class="o">...</span> 
+<span class="p">}</span></code></pre></div>
+
+<p>Now on the terminal update your <code>composer</code>. composer update Now you have to tell Laravel you are using this asset management package. So, open your <code>app/config/app.php</code> and add this line inside the <code>providers</code> block:</p>
+
+<div class="highlight"><pre><code class="language-php" data-lang="php"><span class="s1">&#39;Codesleeve\AssetPipeline\AssetPipelineServiceProvider&#39;</span><span class="p">,</span></code></pre></div>
+
+<h2>Creating the assets directory</h2>
+<p>Now, on the terminal type a <code>artisan</code> command (from the package we've installed):</p>
+
+<div class="highlight"><pre><code class="language-php" data-lang="php"><span class="nx">php</span> <span class="nx">artisan</span> <span class="nx">assets</span><span class="o">:</span><span class="nx">setup</span></code></pre></div>
+
+<p>This will create the <code>app/assets</code> folder. Inside it you will find 2 new directories: <code>javascripts</code> and <code>stylesheets</code>. Inside each one you will find a file called "application" (application.css and application.js). These are our <code>manifest</code> files. You will understand what a "manifest" file is later. So we have the follow structure:</p>
+<ul>
+<li>/app
+<ul>
+<li>assets
+<ul>
+<li>javascripts
+<ul>
+<li>application.js </li>
+</ul>
+</li>
+<li>stylesheets
+<ul>
+<li>application.css</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2>The package "logic"</h2>
+<p>In a easy way what the package does is to get the assets files content, join them, minify them and save the result. So, the package will get your "assets file list", get the content one by one, concatenate them and run a CSS minify or JS minify algorithm, provided by some PHP class.</p>
+<h2>The base assets route</h2>
+<p>By default the package will use the route <code>http://example.org/assets/application.(js|css)</code>. You can find it in the routes list:</p>
+
+<div class="highlight"><pre><code class="language-php" data-lang="php"><span class="nx">php</span> <span class="nx">artisan</span> <span class="nx">routes</span></code></pre></div>
+
+<p>You can find a <code>GET /assets/{path}</code> route. You can change that for what you want. Let's suppose you want <code>/static/application.js</code> for example. You only have to change the package config file. First you have to install this config file, so run the follow <strong>artisan</strong> command:</p>
+
+<div class="highlight"><pre><code class="language-php" data-lang="php"><span class="nx">php</span> <span class="nx">artisan</span> <span class="nx">config</span><span class="o">:</span><span class="nx">publish</span> <span class="nx">codesleeve</span><span class="o">/</span><span class="nx">asset</span><span class="o">-</span><span class="nx">pipeline</span></code></pre></div>
+
+<p>This will create the <code>app/config/packages/codesleeve/asset-pipeline/config.php</code>. You can change the route you want and other options inside this config file.</p>
+<h2>Testing</h2>
+<p>Now, go to <code>http://yoursite.org/assets/application.js</code> and see the result. ATTENTION: if you got a 404 error you are doing something wrong, check:</p>
+<ol>
+<li>
+<p>You have a <code>assets</code> directory inside your <code>public</code> dir. If you have one, please, change its name to, for example, <code>assets2</code>, just for now.</p>
+</li>
+<li>
+<p>You are using the PHP 5.4+ built-in server the wrong way. I had a BIG problem with this. You cannot start the PHP server (with Laravel 4) this way</p>
+<p><code>php -S localhost:8000 -t public</code>.</p>
+</li>
+</ol>
+<p>You <strong>MUST</strong> use the <code>server.php</code> file that Laravel 4 provides you, so you must start the PHP server this way: <code>php -S localhost:8000 server.php</code>. Now you can see the <code>http://yoursite.org/assets/application.js</code> file, but with the default content.</p>
+<h2>Inserting the files inside your HTML</h2>
+<p>Now you have everything working you have to include this tags inside your HTML. So insert the above inside your template or view file:</p>
+
+<h2>Copying your assets file you already are using</h2>
+<p>You can copy the <code>css</code> and <code>js</code> files you are using to the respective directories inside <code>app/assets</code> folder. Copy them, and open your website and check the code. You will se all the JS and the CSS files. If you are using your environment as "production" you will see all files concatenated in only one. The package show all files for "testing" or "development" environments and just one for the "production" one.</p>
+<h2>Setting the file ordering</h2>
+<p>We've talking about the MANIFEST file, right? Manifest file is the file that will control the order to load each asset file (JS or CSS). Open the <code>app/assets/javascripts/application.js</code>. You will see something like this:</p>
+
+<div class="highlight"><pre><code class="language-php" data-lang="php"><span class="c1">// This is a manifest file that&#39;ll be compiled into application.js, which will include all the files </span>
+<span class="c1">// listed below. </span>
+<span class="c1">// </span>
+<span class="c1">// Any JavaScript/Coffee file within this directory, lib/assets/javascripts, vendor/assets/javascripts, </span>
+<span class="c1">// can be referenced here using a relative path. </span>
+<span class="c1">// </span>
+<span class="c1">// It&#39;s not advisable to add code directly here, but if you do, it&#39;ll appear in whatever order it </span>
+<span class="c1">// gets included (e.g. say you have require_tree . then the code will appear after all the directories </span>
+<span class="c1">// but before any files alphabetically greater than &#39;application.js&#39; </span>
+<span class="c1">// </span>
+<span class="c1">// The available directives right now are require, require_directory, and require_tree </span>
+<span class="c1">//  </span>
+<span class="c1">//= require_tree . The line where you have</span></code></pre></div>
+
+<p><code>= require_tree .</code> is telling the asset manager to load all files inside the <code>javascripts</code> directory in alphabetic order. If you want to set a custom order you can write something like that:</p>
+
+<div class="highlight"><pre><code class="language-php" data-lang="php"><span class="c1">//= require ./jquery </span>
+<span class="c1">//= require ./some-lib </span>
+<span class="c1">//= require ./another-lib</span></code></pre></div>
+
+<p>Now you will have all files you specified inside the MANIFEST file minified and being managed by the package. Now, you can do the same for CSS files. The package has more options like cache, etc. You can check the package's configuration file and found more details there. Be happy!</p>
+
+  </article>
+
+  
+  <div class="disqus">
+    <div id="disqus_thread"></div>
+    <script type="text/javascript">
+        /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+        var disqus_shortname = 'grossi-io'; // required: replace example with your forum shortname
+
+        /* * * DON'T EDIT BELOW THIS LINE * * */
+        (function() {
+            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  </div>
+  
+
+</div>
+
+      </div>
+    </div>
+
+    <footer class="site-footer">
+
+  <div class="wrapper">
+
+    <!-- <h2 class="footer-heading">Junior Grossi</h2> -->
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col  footer-col-1">
+        <p>
+          <a href="http://grossi.io">
+            <img src="http://www.gravatar.com/avatar/7bb3a66a199daec275d5ad339724c754.png?s=100" alt="Junior Grossi">
+          </a>
+        </p>
+        <ul class="contact-list">
+          <li>Junior Grossi</li>
+          <li><a href="mailto:juniorgro@gmail.com">juniorgro@gmail.com</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col  footer-col-2">
+        <ul class="social-media-list">
+          
+          <li>
+            <a href="https://github.com/jgrossi">
+              <span class="icon  icon--github">
+                <svg viewBox="0 0 16 16">
+                  <path fill="#828282" d="M7.999,0.431c-4.285,0-7.76,3.474-7.76,7.761 c0,3.428,2.223,6.337,5.307,7.363c0.388,0.071,0.53-0.168,0.53-0.374c0-0.184-0.007-0.672-0.01-1.32 c-2.159,0.469-2.614-1.04-2.614-1.04c-0.353-0.896-0.862-1.135-0.862-1.135c-0.705-0.481,0.053-0.472,0.053-0.472 c0.779,0.055,1.189,0.8,1.189,0.8c0.692,1.186,1.816,0.843,2.258,0.645c0.071-0.502,0.271-0.843,0.493-1.037 C4.86,11.425,3.049,10.76,3.049,7.786c0-0.847,0.302-1.54,0.799-2.082C3.768,5.507,3.501,4.718,3.924,3.65 c0,0,0.652-0.209,2.134,0.796C6.677,4.273,7.34,4.187,8,4.184c0.659,0.003,1.323,0.089,1.943,0.261 c1.482-1.004,2.132-0.796,2.132-0.796c0.423,1.068,0.157,1.857,0.077,2.054c0.497,0.542,0.798,1.235,0.798,2.082 c0,2.981-1.814,3.637-3.543,3.829c0.279,0.24,0.527,0.713,0.527,1.437c0,1.037-0.01,1.874-0.01,2.129 c0,0.208,0.14,0.449,0.534,0.373c3.081-1.028,5.302-3.935,5.302-7.362C15.76,3.906,12.285,0.431,7.999,0.431z"/>
+                </svg>
+              </span>
+
+              <span class="username">jgrossi</span>
+            </a>
+          </li>
+          
+
+          
+          <li>
+            <a href="https://twitter.com/junior_grossi">
+              <span class="icon  icon--twitter">
+                <svg viewBox="0 0 16 16">
+                  <path fill="#828282" d="M15.969,3.058c-0.586,0.26-1.217,0.436-1.878,0.515c0.675-0.405,1.194-1.045,1.438-1.809
+                  c-0.632,0.375-1.332,0.647-2.076,0.793c-0.596-0.636-1.446-1.033-2.387-1.033c-1.806,0-3.27,1.464-3.27,3.27 c0,0.256,0.029,0.506,0.085,0.745C5.163,5.404,2.753,4.102,1.14,2.124C0.859,2.607,0.698,3.168,0.698,3.767 c0,1.134,0.577,2.135,1.455,2.722C1.616,6.472,1.112,6.325,0.671,6.08c0,0.014,0,0.027,0,0.041c0,1.584,1.127,2.906,2.623,3.206 C3.02,9.402,2.731,9.442,2.433,9.442c-0.211,0-0.416-0.021-0.615-0.059c0.416,1.299,1.624,2.245,3.055,2.271 c-1.119,0.877-2.529,1.4-4.061,1.4c-0.264,0-0.524-0.015-0.78-0.046c1.447,0.928,3.166,1.469,5.013,1.469 c6.015,0,9.304-4.983,9.304-9.304c0-0.142-0.003-0.283-0.009-0.423C14.976,4.29,15.531,3.714,15.969,3.058z"/>
+                </svg>
+              </span>
+
+              <span class="username">junior_grossi</span>
+            </a>
+          </li>
+          
+        </ul>
+      </div>
+
+      <div class="footer-col  footer-col-3">
+        <p class="text">This is my blog about web development in general. I write about PHP (Wordpress, Laravel, etc), Ruby (Rails, Jekyll), NodeJS (Socket) and more. Be welcome and let your comment :-)
+</p>
+      </div>
+    </div>
+
+  </div>
+
+</footer>
+
+
+  </body>
+
+</html>

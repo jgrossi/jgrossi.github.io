@@ -1,0 +1,773 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Junior Grossi</title>
+    <description>This is my blog about web development in general. I write about PHP (Wordpress, Laravel, etc), Ruby (Rails, Jekyll), NodeJS (Socket) and more. Be welcome and let your comment :-)
+</description>
+    <link>http://grossi.io/</link>
+    <atom:link href="http://grossi.io/feed.xml" rel="self" type="application/rss+xml"/>
+    <pubDate>Fri, 05 Dec 2014 15:46:06 -0200</pubDate>
+    <lastBuildDate>Fri, 05 Dec 2014 15:46:06 -0200</lastBuildDate>
+    <generator>Jekyll v2.5.2</generator>
+    
+      <item>
+        <title>Working with Laravel 4 and Wordpress together</title>
+        <description>&lt;p&gt;Hi everybody!&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;#using-wordpress-corcel&quot;&gt;Updated May 11th 2014&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;Currently I am working on a project where I had to make some choices about technologies and how work with them together. First this project will be developed using Wordpress only. It&#39;s a College Group site, where we had to work with 13 schools around the world and each one must has the control of your own content.&lt;/p&gt;
+&lt;p&gt;This could be made with Wordpress, but I think when the site is not so small maybe you can use another CMS or Framework, because I particularly prefer to work with MVC. So because some decisions inside the company we decided to use Wordpress Admin Panel, that is a very good, use its architecture and its database. So Wordpress will be used to the application back-end, with user control, user permission, etc.&lt;/p&gt;
+&lt;p&gt;To the front-end we decided to work with Laravel. To query information from the Wordpress database we&#39;ve used the wordpress functions inside Laravel, so it&#39;s much better to work with a MVC Wordpress.&lt;/p&gt;
+
+&lt;h2&gt;Installing Wordpress and Laravel&lt;/h2&gt;
+&lt;p&gt;Let&#39;s install Laravel first using Composer. This will take some while.&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;composer create-project laravel/laravel&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;So we have now our Laravel folder structure with everything installed. Now let&#39;s install a fresh installation of Wordpress inside Laravel. Here you have to options:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;Install Wordpress as a sub-dir of &lt;code&gt;public&lt;/code&gt; Laravel folder, like &lt;code&gt;/public/wordpress&lt;/code&gt;. So to access your Wordpress Admin you have to go to something like &lt;code&gt;http://example.com/wordpress/wp-admin&lt;/code&gt;.&lt;/li&gt;
+&lt;li&gt;Install Wordpress as a sub-dir of the Laravel&#39;s root, like &lt;code&gt;/wordpress&lt;/code&gt;. So you will have &lt;code&gt;/app&lt;/code&gt; and &lt;code&gt;/wordpress&lt;/code&gt; in the same position. For this you have to create another VirtualHost to point to Wordpress installation. You can setup a subdomain lik &lt;code&gt;wp.example.com&lt;/code&gt; and poit it to &lt;code&gt;/laravel/folder/wordpress&lt;/code&gt;. This way you can access the Admin going to &lt;code&gt;http://wp.example.com/wp-admin&lt;/code&gt;.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3&gt;Removing the Wordpress front-end&lt;/h3&gt;
+&lt;p&gt;For security issues go to &lt;code&gt;/wordpress/index.php&lt;/code&gt; file and put this first, to redirect to the Admin login page:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-php&quot; data-lang=&quot;php&quot;&gt;&lt;span class=&quot;nb&quot;&gt;header&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&amp;quot;Location: ./wp-admin&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;exit&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;So, when you visit &lt;code&gt;http://wp.example.com&lt;/code&gt; or &lt;code&gt;http://example.com/wordpress&lt;/code&gt; you are redirected to the Wordpress Admin login page.&lt;/p&gt;
+&lt;h2&gt;Connect Laravel to Wordpress&lt;/h2&gt;
+&lt;p&gt;Now we have to include Wordpress inside Laravel. It&#39;s easier than you think. Just edit the &lt;code&gt;public/index.php&lt;/code&gt; Laravel file and include the follow &lt;strong&gt;before anything&lt;/strong&gt;:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-php&quot; data-lang=&quot;php&quot;&gt;&lt;span class=&quot;cm&quot;&gt;/*&lt;/span&gt;
+&lt;span class=&quot;cm&quot;&gt;|--------------------------------------------------------------------------&lt;/span&gt;
+&lt;span class=&quot;cm&quot;&gt;| Wordpress&lt;/span&gt;
+&lt;span class=&quot;cm&quot;&gt;|--------------------------------------------------------------------------&lt;/span&gt;
+&lt;span class=&quot;cm&quot;&gt;|&lt;/span&gt;
+&lt;span class=&quot;cm&quot;&gt;| Integrate Wordpress with Laravel core&lt;/span&gt;
+&lt;span class=&quot;cm&quot;&gt;|&lt;/span&gt;
+&lt;span class=&quot;cm&quot;&gt;*/&lt;/span&gt;
+
+&lt;span class=&quot;nb&quot;&gt;define&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;WP_USE_THEMES&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;false&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;require&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;__DIR__&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;/../wordpress/wp-blog-header.php&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Now you can use Wordpress functions with Laravel. Yes, like a piece of cake!!!&lt;/p&gt;
+&lt;h3&gt;Querying Posts&lt;/h3&gt;
+&lt;p&gt;Let&#39;s suppose you need to get some posts and show to the view file:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-php&quot; data-lang=&quot;php&quot;&gt;&lt;span class=&quot;c1&quot;&gt;// app/controllers/SchoolController.php&lt;/span&gt;
+
+&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;SchoolController&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;extends&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;BaseController&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;index&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;nv&quot;&gt;$query&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;WP_Query&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;array&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;
+            &lt;span class=&quot;s1&quot;&gt;&amp;#39;post_type&amp;#39;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;school&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+            &lt;span class=&quot;s1&quot;&gt;&amp;#39;posts_per_page&amp;#39;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;20&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+            &lt;span class=&quot;s1&quot;&gt;&amp;#39;order&amp;#39;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;ASC&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+            &lt;span class=&quot;s1&quot;&gt;&amp;#39;orderby&amp;#39;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;post_title&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;));&lt;/span&gt;
+
+        &lt;span class=&quot;nv&quot;&gt;$posts&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$query&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;get_posts&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
+
+        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;View&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;make&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;school.index&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;with&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;schools&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$posts&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Maybe you need some Wordpress features but you have to use it from your theme&#39;s folder. If you don&#39;t know how to create a Wordpress Theme, check &lt;a href=&quot;http://grossi.io/2012/creating-your-first-wordpress-theme-part-1/&quot;&gt;this post&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;For example, in my project I had to create a &quot;About&quot; page for each school. So I create pages with taxonomies called &quot;SchoolName&quot;. After, I create a page with the &quot;About&quot; title and select the &quot;São Paulo&#39;s School&quot; term in my taxonomy &quot;SchoolName&quot;. But all schools will have the same page structure, right? So I have to create a template page inside my Wordpress theme&#39;s folder. This way I can have custom fields to this page and all schools will have the About page looking like the same.&lt;/p&gt;
+&lt;p&gt;So, create a custom theme, adding a &lt;code&gt;style.css&lt;/code&gt; file and a &lt;code&gt;index.php&lt;/code&gt; file and activating it from the Wordpress panel. After that create a new file called &lt;code&gt;about.php&lt;/code&gt;. Inside it put:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-php&quot; data-lang=&quot;php&quot;&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;?&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;php&lt;/span&gt; &lt;span class=&quot;cm&quot;&gt;/* Template Name: About page */&lt;/span&gt; &lt;span class=&quot;cp&quot;&gt;?&amp;gt;&lt;/span&gt;&lt;span class=&quot;x&quot;&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;So I created a Template called &quot;About page&quot; and when creating the &quot;About&quot; page I select the &quot;About page&quot; template name too. Now my page has a custom taxonomy and a template name.&lt;/p&gt;
+&lt;p&gt;Now let&#39;s query some pages.&lt;/p&gt;
+&lt;h3&gt;Getting Pages&lt;/h3&gt;
+&lt;p&gt;Now if you have to get information about some page, like &quot;About&quot; page. Remember here that the permalinks from Wordpress won&#39;t be used. We are going to use only the Laravel routes and URL&#39;s. We are using Wordpress only to fill the database and use its Admin Panel.&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-php&quot; data-lang=&quot;php&quot;&gt;&lt;span class=&quot;sd&quot;&gt;/**&lt;/span&gt;
+&lt;span class=&quot;sd&quot;&gt; * Getting page from Wordpress&lt;/span&gt;
+&lt;span class=&quot;sd&quot;&gt; */&lt;/span&gt;
+
+&lt;span class=&quot;c1&quot;&gt;// Getting page by ID&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;$page&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;get_post&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1234&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+
+&lt;span class=&quot;c1&quot;&gt;// Getting page by slug&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;$query&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;WP_Query&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;array&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;
+    &lt;span class=&quot;s1&quot;&gt;&amp;#39;post_type&amp;#39;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;page&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+    &lt;span class=&quot;s1&quot;&gt;&amp;#39;posts_per_page&amp;#39;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+    &lt;span class=&quot;s1&quot;&gt;&amp;#39;name&amp;#39;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;about&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;// here the &amp;#39;about&amp;#39; is the page slug you stored in wordpress when creating the page&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;));&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;$page&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;array_shift&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$query&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;get_posts&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;());&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;// first post returned&lt;/span&gt;
+
+&lt;span class=&quot;c1&quot;&gt;// Getting page by template name&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;$templateFileName&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;about.php&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;// here you must use the PHP FILE we&amp;#39;ve created in the theme folder&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;$query&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;WP_Query&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;array&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;
+    &lt;span class=&quot;s1&quot;&gt;&amp;#39;post_type&amp;#39;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;page&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+    &lt;span class=&quot;s1&quot;&gt;&amp;#39;my-taxonomy-name-here&amp;#39;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;my-term-slug-here&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+    &lt;span class=&quot;s1&quot;&gt;&amp;#39;posts_per_page&amp;#39;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+    &lt;span class=&quot;s1&quot;&gt;&amp;#39;meta_key&amp;#39;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;_wp_page_template&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+    &lt;span class=&quot;s1&quot;&gt;&amp;#39;meta_value&amp;#39;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$templateFileName&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;));&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;$page&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;array_shift&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$query&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;get_posts&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;());&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;So, that&#39;s it. Now you can use the power of Laravel with the facilities of Wordpress. So, if you&#39;re creating a website and need more organisation to your files you have use both to make your life easier.&lt;/p&gt;
+&lt;p&gt;You can too use custom database tables to work only with Laravel, using Models, etc. You can join both worlds and have a better final result.&lt;/p&gt;
+&lt;h1 id=&quot;using-wordpress-corcel&quot;&gt;Using Wordpress Corcel&lt;/h1&gt;
+&lt;p&gt;Some time ago I started to create a project based on Eloquent ORM (from Laravel) and Wordpress. The project is hosted at Github and you can &lt;a href=&quot;https://github.com/jgrossi/corcel&quot;&gt;get more info here&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;You can install it using Composer. Just add &lt;code&gt;jgrossi/corcel&lt;/code&gt; in your &lt;code&gt;composer.json&lt;/code&gt; file and be happy.&lt;/p&gt;
+&lt;p&gt;There are much work to do but currently you can use some cool features, like:&lt;/p&gt;
+&lt;h2&gt;Getting posts&lt;/h2&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-php&quot; data-lang=&quot;php&quot;&gt;&lt;span class=&quot;c1&quot;&gt;// All published posts&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;$posts&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;Post&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;published&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;get&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;$posts&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;Post&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;status&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;publish&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;get&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
+
+&lt;span class=&quot;c1&quot;&gt;// A specific post&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;$post&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;Post&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;find&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;31&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$post&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;post_title&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;h2&gt;Working with custom post types&lt;/h2&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-php&quot; data-lang=&quot;php&quot;&gt;&lt;span class=&quot;c1&quot;&gt;// using type() method&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;$videos&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;Post&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;type&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;video&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;status&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;publish&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;get&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
+
+&lt;span class=&quot;c1&quot;&gt;// using your own class&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Video&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;extends&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;Corcel\Post&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;protected&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$postType&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;video&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;$videos&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;Video&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;status&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;publish&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;get&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;h2&gt;Custom post type and custom fields (meta data)&lt;/h2&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-php&quot; data-lang=&quot;php&quot;&gt;&lt;span class=&quot;c1&quot;&gt;// Get 3 posts with custom post type (store) and show its title&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;$stores&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;Post&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;type&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;store&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;status&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;publish&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;take&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;get&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;foreach&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$stores&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;as&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$store&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;nv&quot;&gt;$storeAddress&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$store&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;address&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;h2&gt;Pages&lt;/h2&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-php&quot; data-lang=&quot;php&quot;&gt;&lt;span class=&quot;c1&quot;&gt;// Find a page by slug&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;$page&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;Page&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;slug&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;about&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;first&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;// OR&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;$page&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;Post&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;type&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;page&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;slug&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;about&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;first&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$page&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;post_title&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;If you want to contribute with this project you&#39;re very welcome. Ideas are welcome too.&lt;/p&gt;
+&lt;p&gt;Thank you for reading.&lt;/p&gt;
+</description>
+        <pubDate>Sat, 26 Apr 2014 19:53:02 -0300</pubDate>
+        <link>http://grossi.io/2014/working-with-laravel-4-and-wordpress-together</link>
+        <guid isPermaLink="true">http://grossi.io/2014/working-with-laravel-4-and-wordpress-together</guid>
+        
+        
+        <category>php</category>
+        
+        <category>wordpress</category>
+        
+        <category>laravel</category>
+        
+        <category>web server</category>
+        
+        <category>laravel 4</category>
+        
+      </item>
+    
+      <item>
+        <title>Generating IDs like Youtube or Bit.ly using PHP</title>
+        <description>&lt;p&gt;Let&#39;s supose you want to develop your own URL shortener, like &lt;a href=&quot;http://bit.ly&quot;&gt;Bit.ly&lt;/a&gt; for example.&lt;/p&gt;
+&lt;p&gt;You can, of course, use the ID as a integer, like, 1, 2, 3, etc. If you have 12.345 rows in your database table, you will need 5 digits, like &lt;strong&gt;http://example.com/12345&lt;/strong&gt;. Large applications like Youtube, have much more entries, so, to use numbers, the URL will be very long, like &lt;code&gt;http://youtube.com/watch?v=231268318276783&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;Because that, these websites, like &lt;a href=&quot;http://youtube.com&quot;&gt;YouTube&lt;/a&gt;, &lt;a href=&quot;http://t.co&quot;&gt;t.co&lt;/a&gt;, &lt;a href=&quot;http://bitly.com&quot;&gt;bitly.com&lt;/a&gt; or even &lt;a href=&quot;http://vine.co&quot;&gt;vine.co&lt;/a&gt;, are using a generated ID using uppercase letters, lowercase letters, digits and sometimes underscore (_) and hyphen (-). You can check that given a YouTube video URL where you will find something like &lt;code&gt;http://www.youtube.com/watch?v=2Z4m4lnjxkY&lt;/code&gt;. You can see they&#39;re using the &quot;2Z4m4lnjxkY&quot; as ID.&lt;/p&gt;
+&lt;p&gt;&lt;a id=&quot;more&quot;&gt;&lt;/a&gt;&lt;a id=&quot;more-714&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;h2&gt;The Math - Base 10&lt;/h2&gt;
+&lt;p&gt;You have the ID in pure digits (base 10, or decimal), where you have 10 options for each &quot;position&quot;: 0, 1, 2, 3, 4, 5, 6, 7, 8 and 9. So, with 5 positions you can theoretically represent 10&amp;#42;10&amp;#42;10&amp;#42;10&amp;#42;10 (100.000) IDs. Of course you won&#39;t represent the number 45 as 00045 or even will have the 00000 ID, but they are mathematics options. :D&lt;/p&gt;
+&lt;h3&gt;Base 32&lt;/h3&gt;
+&lt;p&gt;So, to improve the number of options you can add more chars, like lowercase letter and digits. Basically you can use a &lt;strong&gt;base32&lt;/strong&gt; converter. The &lt;strong&gt;base32&lt;/strong&gt; will convert a decimal number to a string using digits and lowercase letters, like &lt;code&gt;u63j8d&lt;/code&gt;:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-php&quot; data-lang=&quot;php&quot;&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;?&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;php&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;// Converting the number 328743826 from base 10 to base 32 &lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;base_convert&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;328743826&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;10&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;32&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;This will produce the result &quot;9pgesi&quot;. Cool, we could reduce a lot the number of characters. But we can do better.&lt;/p&gt;
+&lt;h3&gt;Base 62&lt;/h3&gt;
+&lt;p&gt;With &lt;strong&gt;base32&lt;/strong&gt; you have all digits and all lowercase letters. With &lt;strong&gt;base62&lt;/strong&gt; we have also uppercase letters, generating IDs like &quot;8H9j8sD79&quot;. So using a &lt;strong&gt;base62&lt;/strong&gt; convertor we have much more options than &lt;strong&gt;base32&lt;/strong&gt;. For example, with 5 positions we can have 62&amp;#42;62&amp;#42;62&amp;#42;62&amp;#42;62 = 916.132.832 options.&lt;/p&gt;
+&lt;p&gt;With PHP you cannot use the &lt;code&gt;base_convert&lt;/code&gt; function because it only works from base 2 to base 36 and we need more, we need 62, so we have some already coded sources to do that.&lt;/p&gt;
+&lt;p&gt;This class was sent to me by &lt;a href=&quot;http://twitter.com/taylorotwell&quot;&gt;Taylor Otwell&lt;/a&gt;, the creator of the &lt;a href=&quot;http://laravel.com&quot;&gt;Laravel Framework&lt;/a&gt;. It works very well and will solve your problem to generate &lt;strong&gt;base62&lt;/strong&gt; strings. You can get the code &lt;a href=&quot;https://gist.github.com/jgrossi/a4eb21bbe00763d63385&quot;&gt;here&lt;/a&gt;!&lt;/p&gt;
+&lt;h2&gt;Example&lt;/h2&gt;
+&lt;p&gt;This is how you can use this class to generate your &lt;strong&gt;base62&lt;/strong&gt; strings:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-php&quot; data-lang=&quot;php&quot;&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;?&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;php&lt;/span&gt; 
+&lt;span class=&quot;nv&quot;&gt;$my_id&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;23435&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;// get the ID from MySQL for example;&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;$base62&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;Math&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;to_base&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$my_id&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;62&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;To get the decimal ID from the &lt;strong&gt;base62&lt;/strong&gt; string you have to do:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-php&quot; data-lang=&quot;php&quot;&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;?&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;php&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;$base62&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;b6H8Jk2&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;$decimal&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;Math&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;to_base_10&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$base62&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;62&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;You must add a new column on your database table called, for example, &quot;base62&quot;. So every time you insert a new item you get the ID, generate the base62 string and save.&lt;/p&gt;
+&lt;p&gt;Be happy!&lt;/p&gt;
+</description>
+        <pubDate>Wed, 06 Nov 2013 13:38:10 -0200</pubDate>
+        <link>http://grossi.io/2013/generating-ids-like-youtube-or-bit-ly-using-php</link>
+        <guid isPermaLink="true">http://grossi.io/2013/generating-ids-like-youtube-or-bit-ly-using-php</guid>
+        
+        
+        <category>php</category>
+        
+      </item>
+    
+      <item>
+        <title>Managing assets with Laravel 4</title>
+        <description>&lt;p&gt;Generally assets are stored in your public directory, right? They are public, so anyone can get access to them. But nowadays the performance is a very important factor when deploying a new app. I strongly recommend you to minify and cache your assets, like CSS files, Javascript files and Images.&lt;/p&gt;
+&lt;p&gt;If you are using 11 javascript files in your app you don&#39;t have to make 11 requests on the server, one per JS files. You can easily join all files and minify them, so you will have just one minified file. This is easy to do using Laravel 4! I&#39;ve found four Laravel 4 assets managers:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;http://github.com/codesleeve/asset-pipeline&quot;&gt;codesleeve/asset-pipeline:&lt;/a&gt; &lt;strong&gt;My choice!&lt;/strong&gt; It is easy to understand and to work with &lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;http://github.com/jasonlewis/basset&quot;&gt;jasonlewis/basset:&lt;/a&gt; Very good library created by Jason Lewis &lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;http://github.com/teepluss/asset&quot;&gt;teepluss/asset:&lt;/a&gt; Based on the Laravel 3 Asset class. It does not minify or join your files. &lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;http://github.com/way/guard-laravel&quot;&gt;way/guard-laravel:&lt;/a&gt; A very good package but you must have Ruby installed &lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;We will work with &lt;a href=&quot;http://github.com/codesleeve/asset-pipeline&quot;&gt;codesleeve/asset-pipeline&lt;/a&gt; package. It&#39;s easy to use and simple to understand.&lt;/p&gt;
+&lt;p&gt;&lt;a id=&quot;more&quot;&gt;&lt;/a&gt;&lt;a id=&quot;more-749&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;h2&gt;Installation&lt;/h2&gt;
+&lt;p&gt;Let&#39;s suppose you already have a Laravel 4 working. First, using Composer, you have to install the package. So, open your &lt;code&gt;composer.json&lt;/code&gt; and add the package information to install it:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-php&quot; data-lang=&quot;php&quot;&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; 
+    &lt;span class=&quot;o&quot;&gt;...&lt;/span&gt; 
+    &lt;span class=&quot;s2&quot;&gt;&amp;quot;require&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; 
+        &lt;span class=&quot;s2&quot;&gt;&amp;quot;laravel/framework&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;4.0.*&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; 
+        &lt;span class=&quot;s2&quot;&gt;&amp;quot;codesleeve/asset-pipeline&amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;dev-master&amp;quot;&lt;/span&gt; 
+    &lt;span class=&quot;p&quot;&gt;},&lt;/span&gt; 
+    &lt;span class=&quot;o&quot;&gt;...&lt;/span&gt; 
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Now on the terminal update your &lt;code&gt;composer&lt;/code&gt;. composer update Now you have to tell Laravel you are using this asset management package. So, open your &lt;code&gt;app/config/app.php&lt;/code&gt; and add this line inside the &lt;code&gt;providers&lt;/code&gt; block:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-php&quot; data-lang=&quot;php&quot;&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;Codesleeve\AssetPipeline\AssetPipelineServiceProvider&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;h2&gt;Creating the assets directory&lt;/h2&gt;
+&lt;p&gt;Now, on the terminal type a &lt;code&gt;artisan&lt;/code&gt; command (from the package we&#39;ve installed):&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-php&quot; data-lang=&quot;php&quot;&gt;&lt;span class=&quot;nx&quot;&gt;php&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;artisan&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;assets&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;setup&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;This will create the &lt;code&gt;app/assets&lt;/code&gt; folder. Inside it you will find 2 new directories: &lt;code&gt;javascripts&lt;/code&gt; and &lt;code&gt;stylesheets&lt;/code&gt;. Inside each one you will find a file called &quot;application&quot; (application.css and application.js). These are our &lt;code&gt;manifest&lt;/code&gt; files. You will understand what a &quot;manifest&quot; file is later. So we have the follow structure:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;/app
+&lt;ul&gt;
+&lt;li&gt;assets
+&lt;ul&gt;
+&lt;li&gt;javascripts
+&lt;ul&gt;
+&lt;li&gt;application.js &lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;stylesheets
+&lt;ul&gt;
+&lt;li&gt;application.css&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2&gt;The package &quot;logic&quot;&lt;/h2&gt;
+&lt;p&gt;In a easy way what the package does is to get the assets files content, join them, minify them and save the result. So, the package will get your &quot;assets file list&quot;, get the content one by one, concatenate them and run a CSS minify or JS minify algorithm, provided by some PHP class.&lt;/p&gt;
+&lt;h2&gt;The base assets route&lt;/h2&gt;
+&lt;p&gt;By default the package will use the route &lt;code&gt;http://example.org/assets/application.(js|css)&lt;/code&gt;. You can find it in the routes list:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-php&quot; data-lang=&quot;php&quot;&gt;&lt;span class=&quot;nx&quot;&gt;php&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;artisan&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;routes&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;You can find a &lt;code&gt;GET /assets/{path}&lt;/code&gt; route. You can change that for what you want. Let&#39;s suppose you want &lt;code&gt;/static/application.js&lt;/code&gt; for example. You only have to change the package config file. First you have to install this config file, so run the follow &lt;strong&gt;artisan&lt;/strong&gt; command:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-php&quot; data-lang=&quot;php&quot;&gt;&lt;span class=&quot;nx&quot;&gt;php&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;artisan&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;config&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;publish&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;codesleeve&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;asset&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;pipeline&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;This will create the &lt;code&gt;app/config/packages/codesleeve/asset-pipeline/config.php&lt;/code&gt;. You can change the route you want and other options inside this config file.&lt;/p&gt;
+&lt;h2&gt;Testing&lt;/h2&gt;
+&lt;p&gt;Now, go to &lt;code&gt;http://yoursite.org/assets/application.js&lt;/code&gt; and see the result. ATTENTION: if you got a 404 error you are doing something wrong, check:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;You have a &lt;code&gt;assets&lt;/code&gt; directory inside your &lt;code&gt;public&lt;/code&gt; dir. If you have one, please, change its name to, for example, &lt;code&gt;assets2&lt;/code&gt;, just for now.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;You are using the PHP 5.4+ built-in server the wrong way. I had a BIG problem with this. You cannot start the PHP server (with Laravel 4) this way&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;php -S localhost:8000 -t public&lt;/code&gt;.&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;You &lt;strong&gt;MUST&lt;/strong&gt; use the &lt;code&gt;server.php&lt;/code&gt; file that Laravel 4 provides you, so you must start the PHP server this way: &lt;code&gt;php -S localhost:8000 server.php&lt;/code&gt;. Now you can see the &lt;code&gt;http://yoursite.org/assets/application.js&lt;/code&gt; file, but with the default content.&lt;/p&gt;
+&lt;h2&gt;Inserting the files inside your HTML&lt;/h2&gt;
+&lt;p&gt;Now you have everything working you have to include this tags inside your HTML. So insert the above inside your template or view file:&lt;/p&gt;
+
+&lt;h2&gt;Copying your assets file you already are using&lt;/h2&gt;
+&lt;p&gt;You can copy the &lt;code&gt;css&lt;/code&gt; and &lt;code&gt;js&lt;/code&gt; files you are using to the respective directories inside &lt;code&gt;app/assets&lt;/code&gt; folder. Copy them, and open your website and check the code. You will se all the JS and the CSS files. If you are using your environment as &quot;production&quot; you will see all files concatenated in only one. The package show all files for &quot;testing&quot; or &quot;development&quot; environments and just one for the &quot;production&quot; one.&lt;/p&gt;
+&lt;h2&gt;Setting the file ordering&lt;/h2&gt;
+&lt;p&gt;We&#39;ve talking about the MANIFEST file, right? Manifest file is the file that will control the order to load each asset file (JS or CSS). Open the &lt;code&gt;app/assets/javascripts/application.js&lt;/code&gt;. You will see something like this:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-php&quot; data-lang=&quot;php&quot;&gt;&lt;span class=&quot;c1&quot;&gt;// This is a manifest file that&amp;#39;ll be compiled into application.js, which will include all the files &lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;// listed below. &lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;// &lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;// Any JavaScript/Coffee file within this directory, lib/assets/javascripts, vendor/assets/javascripts, &lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;// can be referenced here using a relative path. &lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;// &lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;// It&amp;#39;s not advisable to add code directly here, but if you do, it&amp;#39;ll appear in whatever order it &lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;// gets included (e.g. say you have require_tree . then the code will appear after all the directories &lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;// but before any files alphabetically greater than &amp;#39;application.js&amp;#39; &lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;// &lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;// The available directives right now are require, require_directory, and require_tree &lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;//  &lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;//= require_tree . The line where you have&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;code&gt;= require_tree .&lt;/code&gt; is telling the asset manager to load all files inside the &lt;code&gt;javascripts&lt;/code&gt; directory in alphabetic order. If you want to set a custom order you can write something like that:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-php&quot; data-lang=&quot;php&quot;&gt;&lt;span class=&quot;c1&quot;&gt;//= require ./jquery &lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;//= require ./some-lib &lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;//= require ./another-lib&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Now you will have all files you specified inside the MANIFEST file minified and being managed by the package. Now, you can do the same for CSS files. The package has more options like cache, etc. You can check the package&#39;s configuration file and found more details there. Be happy!&lt;/p&gt;
+</description>
+        <pubDate>Mon, 04 Nov 2013 16:52:52 -0200</pubDate>
+        <link>http://grossi.io/2013/managing-assets-with-laravel-4</link>
+        <guid isPermaLink="true">http://grossi.io/2013/managing-assets-with-laravel-4</guid>
+        
+        
+        <category>php</category>
+        
+        <category>laravel</category>
+        
+        <category>composer</category>
+        
+        <category>laravel 4</category>
+        
+      </item>
+    
+      <item>
+        <title>Working with PHP 5.4+ built-in server with Laravel 4</title>
+        <description>&lt;p&gt;One of the best improvements of the PHP 5.4 was the built-in web server. Like in Ruby On Rails, now you do not need Apache or Nginx inside your development machine.&lt;/p&gt;
+&lt;p&gt;To start a web server is easy:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-php&quot; data-lang=&quot;php&quot;&gt;&lt;span class=&quot;nx&quot;&gt;php&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;S&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;localhost&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;8000&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Remember you can choose the port you want. You can use &lt;code&gt;localhost:8000&lt;/code&gt; or &lt;code&gt;localhost:8080&lt;/code&gt; or what you want.&lt;/p&gt;
+&lt;p&gt;If you want to start the server for a Laravel 4 app your must set the public dir:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-php&quot; data-lang=&quot;php&quot;&gt;&lt;span class=&quot;nx&quot;&gt;php&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;S&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;localhost&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;8000&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;t&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;public&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Ok. This works well. But you can do better than this.&lt;/p&gt;
+&lt;p&gt;When you use &lt;code&gt;-t public/&lt;/code&gt; you are telling the PHP server to start it inside the &lt;code&gt;public&lt;/code&gt; dir, more specifically the &lt;code&gt;public/index.php&lt;/code&gt; file. Ok, but with Laravel 4 this can bring you some problems of routes. In 99% of the cases this will work well but if you have a route like &lt;code&gt;http://example.org/some/file.html&lt;/code&gt; for example, this will not work.&lt;/p&gt;
+&lt;p&gt;The way Laravel 4 work with the web server is a little different. So, because of that, the Laravel 4 team created a custom &lt;code&gt;server.php&lt;/code&gt; file. So you have to start the server with this file:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-php&quot; data-lang=&quot;php&quot;&gt;&lt;span class=&quot;c1&quot;&gt;// inside the Laravel base dir (not public)&lt;/span&gt;
+&lt;span class=&quot;nx&quot;&gt;php&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;S&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;localhost&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;8000&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;server&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;php&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Laravel 4 does the rest for you. Now everything will work and you won&#39;t have problem with routes. Continue to develop your app!&lt;/p&gt;
+</description>
+        <pubDate>Sun, 13 Oct 2013 23:57:45 -0300</pubDate>
+        <link>http://grossi.io/2013/working-with-php-5-4-built-in-server-with-laravel-4</link>
+        <guid isPermaLink="true">http://grossi.io/2013/working-with-php-5-4-built-in-server-with-laravel-4</guid>
+        
+        
+        <category>php</category>
+        
+        <category>laravel</category>
+        
+        <category>laravel 4</category>
+        
+      </item>
+    
+      <item>
+        <title>Be a better PHP developer</title>
+        <description>&lt;p&gt;Actually this post is a outflow and at the same time an advice. I have seen some PHP developers that are completely OUT of what is happening in the PHP world, besides committing some mistakes that cannot be accepted.&lt;/p&gt;
+&lt;h2&gt;PHP 5.3+&lt;/h2&gt;
+&lt;p&gt;If you are entitled as a PHP developer you must to update. In my opinion the best improvements of the language after version 5.3 were &lt;em&gt;namespaces&lt;/em&gt; and &lt;em&gt;closures&lt;/em&gt;. If you don&#39;t know about it, UPDATE yourself, because these added functionalities allowed a fast growth of the language, and developers that are not using them are lagging behind.&lt;/p&gt;
+&lt;h2&gt;Composer&lt;/h2&gt;
+&lt;p&gt;If you are a PHP developer and you don&#39;t know how to use a &lt;a href=&quot;http://getcomposer.org&quot;&gt;Composer&lt;/a&gt; package, study! Every new released package using PHP works with Composer (or should) , and you have to understand how it works first to understand how to develop your new packages or update the old ones you have.&lt;/p&gt;
+&lt;p&gt;Composer is a Dependency Manager for PHP. You can control packages, versions and much more. You do not need to use Composer only for frameworks or components that already use Composer. You can, for example, use a Database ORM like Eloquent or Zend Db with Wordpress. It is very easy to use, but you have to know how it works before anything.&lt;/p&gt;
+&lt;p&gt;If you want to be introduced to Composer please visit &lt;a href=&quot;http://juniorgrossi.com/2013/why-you-should-use-composer-and-how-to-start-using-it/&quot;&gt;my blog post about it&lt;/a&gt;. You really will be more productive using it. Believe me! Composer will allow you to use pieces of code from frameworks inside another one, what is very good.&lt;/p&gt;
+&lt;p&gt;&lt;a id=&quot;more&quot;&gt;&lt;/a&gt;&lt;a id=&quot;more-604&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;h2&gt;Design Patterns&lt;/h2&gt;
+&lt;p&gt;Don&#39;t you know about Design Patterns? Ok! It&#39;s in time to learn. Design Patterns are some default structure solutions to solve problems of design, but the application design (modelling). But, why should I learn that? Just to write a better code and improve reusability. With design patterns you will find some default common problems and every time you find that problem you will find a default design to apply, so it&#39;s easy to solve design solutions in your project.&lt;/p&gt;
+&lt;p&gt;I strongly recommend the book &quot;Head First Design Patterns&quot;. You will find an easy (and cool) way to understand how these patterns work.&lt;/p&gt;
+&lt;h2&gt;Frameworks&lt;/h2&gt;
+&lt;p&gt;If you are a PHP developer that concerns about security and productivity I recommend you to use a framework. It will improve your development speed and you will have a better designed and structured application. Frameworks in PHP are like religions (be careful). You will find developers that &quot;pray&quot; about frameworks every day. They are boring people and they will try to convince you to use the framework they want. I don&#39;t agree with this behaviour.&lt;/p&gt;
+&lt;p&gt;I guess framework is a personal decision and you can use the framework you want, and you have to like the way it works to solve your problem. If you like RubyOnRails, where things happen as magic, with a simple syntax and more human readable you will like &lt;a href=&quot;http://laravel.com&quot;&gt;Laravel&lt;/a&gt; or &lt;a href=&quot;http://cakephp.com&quot;&gt;CakePHP&lt;/a&gt;. Laravel is a new framework (first version in 2011) but with a very fast development by a fantastic team. It is a fast framework (small footprint), where you will start to develop in a couple of minutes.&lt;/p&gt;
+&lt;p&gt;CakePHP is an older framework (first version in 2006), but the most used and with a very large and solid community. We have also other good frameworks If you came from Java you will be more familiar with frameworks like &lt;a href=&quot;http://framework.zend.com&quot;&gt;Zend Framework&lt;/a&gt; or &lt;a href=&quot;http://symfony.com&quot;&gt;Symfony&lt;/a&gt;. These frameworks work as a Java framework, with a hard use of OO and Design Patterns. Both are excellent frameworks and you will be very happy to use them too, if you like how they work.&lt;/p&gt;
+&lt;p&gt;I know I will receive many comments with &quot;Why not &lt;a href=&quot;http://codeigniter.com&quot;&gt;Code Igniter&lt;/a&gt;? Why not &lt;a href=&quot;http://yiiframework.com&quot;&gt;Yii&lt;/a&gt; Framework?&quot;. PHP has A LOT of frameworks and as I said before you have to choose one (or more) to work with and frameworks are like religious, so, you always will find who are not using the same framework you are. We have also other good frameworks like &lt;a href=&quot;http://www.phalconphp.com&quot;&gt;Phalcon&lt;/a&gt;, &lt;a href=&quot;http://www.phpburn.com&quot;&gt;PHP Burn&lt;/a&gt;, &lt;a href=&quot;http://kohanaframework.org&quot;&gt;Kohana&lt;/a&gt;, &lt;a href=&quot;http://www.fuelphp.com&quot;&gt;Fuel&lt;/a&gt; and more. Remember, if you like framework X but you want to use a package from framework Y you can do. Just use Composer and a new world will open in front of you.&lt;/p&gt;
+&lt;h3&gt;Micro Frameworks&lt;/h3&gt;
+&lt;p&gt;You have also the Micro Frameworks, like &lt;a href=&quot;http://slimframework.com&quot;&gt;Slim&lt;/a&gt; or &lt;a href=&quot;http://silex.sensiolabs.org&quot;&gt;Silex&lt;/a&gt;. Both are very good micro-frameworks and generally give you a good route engines and template systems. You can use a micro framework together with others frameworks&#39; components. For example, you can use Slim with MongoDB libraries, Eloquent ORM from Laravel, Zend Framework 2 packages and more. They are common used for API development. Because they have a small footprint you can use them as a API base, what is very productive and simpler too.&lt;/p&gt;
+&lt;h2&gt;TDD&lt;/h2&gt;
+&lt;p&gt;Test is everything. Of course you have to start from basics before test more deeply. Test will make you to write better code and develop a very solid application, allowing you to be sure about your software integrity. Tests grantee your output and a single functionality of a specific use case. To start with tests I recommend working with Laravel. Laravel is test driven, so it allow you to test in a very easy way, using your own way. Start to use TDD with it and you will understand really how TDD works.&lt;/p&gt;
+&lt;h2&gt;PHP Conventions&lt;/h2&gt;
+&lt;p&gt;PHP has changed a lot since last years. A good read is the webpage &lt;a href=&quot;http://www.phptherightway.com&quot;&gt;PHP The right way&lt;/a&gt;, where you can find how to use the newer tools to be a better PHP developer. I strongly recommend you to read this page and think about what is happening into the PHP world.&lt;/p&gt;
+&lt;h2&gt;Create a blog&lt;/h2&gt;
+&lt;p&gt;You should have a blog. A blog allow you to write better and to learn more too. When you receive your first comment - good or bad - you will have a good feeling and this will motivate you to write more and contribute more. Since I created my blog, 2 years ago, I have received many good comments and this is awesome. I can&#39;t describe what I feel helping other developers and this help me to learn more and to meet more people too.&lt;/p&gt;
+&lt;h2&gt;Profiles to follow&lt;/h2&gt;
+&lt;p&gt;Below you have a list with some cool people/projects to follow in the PHP world. These people are people behind big frameworks, big companies or excellent packages.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Slim Framework (&lt;a href=&quot;http://twitter.com/slimphp&quot;&gt;@slimphp&lt;/a&gt;): The team of Slim Framework (micro framework)&lt;/li&gt;
+&lt;li&gt;Konstantin Kovshenin ‏(&lt;a href=&quot;http://twitter.com/kovshenin&quot;&gt;@kovshenin&lt;/a&gt;): Wordpress theme developer&lt;/li&gt;
+&lt;li&gt;SaraMG‏ (&lt;a href=&quot;http://twitter.com/SaraMG&quot;&gt;@SaraMG&lt;/a&gt;): Facebook PHP developer&lt;/li&gt;
+&lt;li&gt;Jordi Boggiano ‏(&lt;a href=&quot;http://twitter.com/seldaek&quot;&gt;@seldaek&lt;/a&gt;): Composer lead. Symfony2 developer.&lt;/li&gt;
+&lt;li&gt;Josh Lockhart ‏(&lt;a href=&quot;http://twitter.com/codeguy&quot;&gt;@codeguy&lt;/a&gt;): Creator of Slim Framework and PHP The right way&lt;/li&gt;
+&lt;li&gt;Dries Vints (&lt;a href=&quot;http://twitter.com/DriesVints&quot;&gt;@DriesVints&lt;/a&gt;): Laravel enthusiast&lt;/li&gt;
+&lt;li&gt;Jonathan Torke (&lt;a href=&quot;http://twitter.com/JonathanTorke&quot;&gt;@JonathanTorke&lt;/a&gt;): Wordpress theme developer&lt;/li&gt;
+&lt;li&gt;Pablo Dall&#39;Oglio ‏(&lt;a href=&quot;http://twitter.com/pablodalloglio&quot;&gt;@pablodalloglio&lt;/a&gt;): Brazilian writer and PHP developer&lt;/li&gt;
+&lt;li&gt;Laravel Ins and Outs ‏(&lt;a href=&quot;http://twitter.com/LaravelIO&quot;&gt;@LaravelIO&lt;/a&gt;): The official Laravel community portal&lt;/li&gt;
+&lt;li&gt;Dayle Rees ‏(&lt;a href=&quot;http://twitter.com/daylerees&quot;&gt;@daylerees&lt;/a&gt;): Laravel core team member&lt;/li&gt;
+&lt;li&gt;Taylor Otwell ‏(&lt;a href=&quot;http://twitter.com/taylorotwell&quot;&gt;@taylorotwell&lt;/a&gt;): The creator of Laravel Framework&lt;/li&gt;
+&lt;li&gt;Laravel ‏(&lt;a href=&quot;http://twitter.com/laravelphp&quot;&gt;@laravelphp&lt;/a&gt;): Official Laravel Twitter profile&lt;/li&gt;
+&lt;li&gt;Sebastian Bergmann ‏(&lt;a href=&quot;http://twitter.com/s_bergmann&quot;&gt;@s_bergmann&lt;/a&gt;): The creator of PHPUnit&lt;/li&gt;
+&lt;li&gt;Derick Rethans ‏(&lt;a href=&quot;http://twitter.com/derickr&quot;&gt;@derickr&lt;/a&gt;): Author of the Xdebug&lt;/li&gt;
+&lt;li&gt;jose_zap ‏(&lt;a href=&quot;http://twitter.com/jose_zap&quot;&gt;@jose_zap&lt;/a&gt;): CakePHP core developer&lt;/li&gt;
+&lt;li&gt;Fabien Potencier ‏(&lt;a href=&quot;http://twitter.com/fabpot&quot;&gt;@fabpot&lt;/a&gt;): Creator of Symfony PHP and SensioLabs&lt;/li&gt;
+&lt;li&gt;Rasmus Lerdorf ‏(&lt;a href=&quot;http://twitter.com/rasmus&quot;&gt;@rasmus&lt;/a&gt;): Creator of PHP&lt;/li&gt;
+&lt;li&gt;Larry E. Masters ‏(&lt;a href=&quot;http://twitter.com/PhpNut&quot;&gt;@PhpNut&lt;/a&gt;): CakePHP founder&lt;/li&gt;
+&lt;li&gt;Rafael Dohms ‏(&lt;a href=&quot;http://twitter.com/rdohms&quot;&gt;@rdohms&lt;/a&gt;): PHP developer and evangelist&lt;/li&gt;
+&lt;li&gt;Pádraic Brady ‏(&lt;a href=&quot;http://twitter.com/padraicb&quot;&gt;@padraicb&lt;/a&gt;): Zend Framework contributor&lt;/li&gt;
+&lt;li&gt;Michelangelo van Dam ‏(&lt;a href=&quot;http://twitter.com/DragonBe&quot;&gt;@DragonBe&lt;/a&gt;): PHP and Zend Framework developer and evangelist&lt;/li&gt;
+&lt;li&gt;Zend Technologies ‏(&lt;a href=&quot;http://twitter.com/zend&quot;&gt;@zend&lt;/a&gt;): The company behind PHP&lt;/li&gt;
+&lt;li&gt;Ryan Mauger ‏(&lt;a href=&quot;http://twitter.com/bittarman&quot;&gt;@bittarman&lt;/a&gt;): PHP developer and Zend Framework evangelist&lt;/li&gt;
+&lt;li&gt;Rob Allen ‏(&lt;a href=&quot;http://twitter.com/akrabat&quot;&gt;@akrabat&lt;/a&gt;): Author of &quot;Zend Framework in Action&quot;&lt;/li&gt;
+&lt;li&gt;weierophinney ‏(&lt;a href=&quot;http://twitter.com/mwop&quot;&gt;@mwop&lt;/a&gt;): PHP and Zend Framework developer (core team)&lt;/li&gt;
+&lt;li&gt;CakePHP ‏(&lt;a href=&quot;http://twitter.com/cakephp&quot;&gt;@cakephp&lt;/a&gt;): The official CakePHP Twitter profile&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+        <pubDate>Wed, 25 Sep 2013 19:55:24 -0300</pubDate>
+        <link>http://grossi.io/2013/be-a-better-php-developer</link>
+        <guid isPermaLink="true">http://grossi.io/2013/be-a-better-php-developer</guid>
+        
+        
+        <category>php</category>
+        
+      </item>
+    
+      <item>
+        <title>Solve the problem. Just it!</title>
+        <description>&lt;p&gt;These days I&#39;m thinking about productivity and the use of PHP frameworks. I&#39;ve read some posts about framework X or Y, defending a framework instead of another one.&lt;/p&gt;
+&lt;p&gt;I know people that use a framework like Zend Framework to develop a simple website just to say they&#39;re using it, and not an &quot;easy&quot; framework. I think you must to solve the problem, not create another one. You have to use best practices but first you have to solve the problem, nothing more.&lt;/p&gt;
+&lt;p&gt;You don&#39;t have to use a hard-to-learn framework just to say your friends you know about it. You can do amazing things with easy-to-learn frameworks, like Code Igniter, CakePHP, Laravel or Slim. You can do better even with pure PHP if you want, but you have to concern about productivity (and security of course).&lt;/p&gt;
+&lt;p&gt;&lt;a id=&quot;more&quot;&gt;&lt;/a&gt;&lt;a id=&quot;more-707&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;We have a lot of good tool to work with PHP like Wordpress, Laravel, Code Igniter, etc. I know people who are ashamed to say they&#39;re using Wordpress. Yes, WP is easy, is simple, but SOLVE YOUR PROBLEM. You can create an entire website with Administrative Panel with few hours and it will be good and productive. If you want to develop a simple web-application you don&#39;t need to use Zend Frameworks 2 or another &quot;hard&quot; framework. You can use small frameworks and easy ones too. Don&#39;t be afraid to say you are using a easy framework or a &quot;new&quot; framework like Laravel.&lt;/p&gt;
+&lt;p&gt;For me, Laravel solve 99% of my problems. When I am talking about websites, I have used Wordpress alone in 80% of them, and some specific cases I can use another Zend Framework or Laravel component just to do an specific use case.&lt;/p&gt;
+&lt;p&gt;Be productive and don&#39;t be shame about what you are using in PHP. If the solution you have found solve your problem use it, earn money and be happy. Remember only to search about libraries you can use to increase your productivity. We have a LOT of cool things already developed in PHP.&lt;/p&gt;
+&lt;p&gt;Best regards. Be happy.&lt;/p&gt;
+</description>
+        <pubDate>Wed, 18 Sep 2013 16:56:39 -0300</pubDate>
+        <link>http://grossi.io/2013/solve-the-problem-just-it</link>
+        <guid isPermaLink="true">http://grossi.io/2013/solve-the-problem-just-it</guid>
+        
+        
+        <category>php</category>
+        
+        <category>wordpress</category>
+        
+        <category>zend framework</category>
+        
+        <category>laravel</category>
+        
+        <category>composer</category>
+        
+      </item>
+    
+      <item>
+        <title>Design Patterns with PHP - Adapters</title>
+        <description>&lt;p&gt;Hi all!&lt;/p&gt;
+&lt;p&gt;Today I am starting a post series about Design Patterns. I have wrote about them a lot but only suggesting you to learn about to be a better developer. I am studying them, so nothing better to write about and improve my knowledges too.&lt;/p&gt;
+&lt;p&gt;I only ask you to read everything to understand the concepts behind the patterns. You have to understand them to know where you can use one or another.&lt;/p&gt;
+&lt;p&gt;&lt;a id=&quot;more&quot;&gt;&lt;/a&gt;&lt;a id=&quot;more-630&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;h2&gt;The Adapter Pattern&lt;/h2&gt;
+&lt;p&gt;The Adapter Pattern is exactly what it is, an adapter. It works to allow you to adapt your code to a new requirement that did not exist before &quot;now&quot;.&lt;/p&gt;
+&lt;p&gt;Let&#39;s suppose you are working on a project where you have a website and have to allow users to write on the company&#39;s Twitter profile. You can have the follow situation:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Post.php:&lt;/strong&gt; Your post class. This is the Post object, where you have text and a URL, for example.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Twitter.php:&lt;/strong&gt; The Twitter class. It can be a class created by you or for example a class you got in Packagist website.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Good. So, you could write a code like that:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-php&quot; data-lang=&quot;php&quot;&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;?&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;php&lt;/span&gt; 
+
+&lt;span class=&quot;c1&quot;&gt;// creating a post and posting to Twitter&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;$post&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;Post&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;$post&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;description&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;My first post to Twitter. Just for fun!&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;$post&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;url&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;http://juniorgrossi.com&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;$post&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;send&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
+
+&lt;span class=&quot;c1&quot;&gt;// inside Post class&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Post&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;c1&quot;&gt;// ... code and more code&lt;/span&gt;
+
+    &lt;span class=&quot;k&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;send&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;nv&quot;&gt;$text&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$this&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;description&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39; &amp;#39;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$this&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;url&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;c1&quot;&gt;// some Twitter class&lt;/span&gt;
+        &lt;span class=&quot;nv&quot;&gt;$twitter&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;Twitter&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
+        &lt;span class=&quot;c1&quot;&gt;// authenticate and more ...&lt;/span&gt;
+        &lt;span class=&quot;nv&quot;&gt;$twitter&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;tweet&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$text&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Ok! That works! Solve your problem perfectly, so it is a very good approach.&lt;/p&gt;
+&lt;p&gt;But now someone tells you that you have to change the code and choose to post to Twitter or Instagram. Ok! It&#39;s easy!&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-php&quot; data-lang=&quot;php&quot;&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;?&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;php&lt;/span&gt; 
+
+&lt;span class=&quot;c1&quot;&gt;// changing the Post class&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Post&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;send&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$service&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;twitter&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$service&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;twitter&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+            &lt;span class=&quot;nv&quot;&gt;$twitter&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;Twitter&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
+            &lt;span class=&quot;c1&quot;&gt;// ...&lt;/span&gt;
+            &lt;span class=&quot;nv&quot;&gt;$twitter&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;tweet&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;elseif&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$service&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;instagram&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+            &lt;span class=&quot;nv&quot;&gt;$instagram&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;Instagram&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
+            &lt;span class=&quot;c1&quot;&gt;// ...&lt;/span&gt;
+            &lt;span class=&quot;nv&quot;&gt;$instagram&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;postToInstagram&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Ok! It works! But you can do better than that. Now it is the opportunity to you to use a pattern, the &lt;strong&gt;Adapter Pattern&lt;/strong&gt;. You can adapt you code to a generally solution, just changing the service you want. If you have now to include Facebook too, you will do that easy, and not change the &lt;code&gt;send()&lt;/code&gt; method again and include one more &lt;code&gt;if&lt;/code&gt; condition. Do that is a very bad idea!&lt;/p&gt;
+&lt;h3&gt;Creating the Service Interface&lt;/h3&gt;
+&lt;p&gt;Here you have 2 different services: Twitter and Instagram. The first one uses a method to &quot;post&quot; called &lt;code&gt;tweet()&lt;/code&gt; and the second another method called &lt;code&gt;postToInstagram()&lt;/code&gt;. First you have to create a pattern, with one method that will be responsable to post to the service, don&#39;t matter what is. It&#39;s the chance you have to create a &lt;strong&gt;Interface&lt;/strong&gt;. Take a look!&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-php&quot; data-lang=&quot;php&quot;&gt;&lt;span class=&quot;k&quot;&gt;interface&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;ServiceInterface&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;authenticate&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;array&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$options&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+
+    &lt;span class=&quot;k&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;post&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$text&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$url&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Just that. Here is the secret of your developer&#39;s life! Use &lt;strong&gt;Interfaces&lt;/strong&gt; for everything! This interface has, for example, two methods: one to authenticate in the service and another to post the text to the service. Now you will create two more classes (pay attention them implements the interface you&#39;ve created):&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-php&quot; data-lang=&quot;php&quot;&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;TwitterService&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;implements&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;ServiceInterface&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;protected&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$service&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+
+    &lt;span class=&quot;k&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;__construct&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;nv&quot;&gt;$this&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;service&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;Twitter&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+    &lt;span class=&quot;k&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;authenticate&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;array&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$options&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;nv&quot;&gt;$apiKey&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$options&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;api_key&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;];&lt;/span&gt;
+        &lt;span class=&quot;c1&quot;&gt;// ...&lt;/span&gt;
+        &lt;span class=&quot;nv&quot;&gt;$this&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;service&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;authenticateUsingSomeMethod&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$apiKey&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+        &lt;span class=&quot;c1&quot;&gt;// ...&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+    &lt;span class=&quot;k&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;post&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$text&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$url&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;c1&quot;&gt;// ...&lt;/span&gt;
+        &lt;span class=&quot;nv&quot;&gt;$this&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;service&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;tweet&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$text&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39; &amp;#39;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;.&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$url&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+        &lt;span class=&quot;c1&quot;&gt;// ...&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;InstagramService&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;implements&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;ServiceInterface&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;protected&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$service&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+
+    &lt;span class=&quot;k&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;__construct&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;nv&quot;&gt;$this&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;service&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;Instagram&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
+        &lt;span class=&quot;nv&quot;&gt;$this&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;service&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;someAnotherMethodYouHaveToCall&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+    &lt;span class=&quot;k&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;authenticate&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;array&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$options&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;c1&quot;&gt;// ...&lt;/span&gt;
+        &lt;span class=&quot;nv&quot;&gt;$this&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;service&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;authenticateWithInstagramClass&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
+        &lt;span class=&quot;c1&quot;&gt;// ...&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+    &lt;span class=&quot;k&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;post&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$text&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$url&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;c1&quot;&gt;// ... &lt;/span&gt;
+        &lt;span class=&quot;nv&quot;&gt;$this&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;service&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;postToInstagram&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$text&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+        &lt;span class=&quot;c1&quot;&gt;// ...&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;And let&#39;s change the &lt;code&gt;Post.php&lt;/code&gt; class for the last time :D&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-php&quot; data-lang=&quot;php&quot;&gt;&lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Post&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;protected&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$service&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+
+    &lt;span class=&quot;k&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;setServiceAdapter&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;ServiceInterface&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$service&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;nv&quot;&gt;$this&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;service&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$service&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+    &lt;span class=&quot;k&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;send&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;nv&quot;&gt;$this&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;service&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;post&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$this&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;description&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$this&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;url&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Now, to use the Post class you have to instantiate, set &lt;code&gt;description&lt;/code&gt; and &lt;code&gt;url&lt;/code&gt; properties, provide the &lt;code&gt;ServiceInterface&lt;/code&gt; object and call the &lt;code&gt;send()&lt;/code&gt; method:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-php&quot; data-lang=&quot;php&quot;&gt;&lt;span class=&quot;c1&quot;&gt;// creating a post and posting to Twitter, Instagram or Facebook&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;$post&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;Post&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
+
+&lt;span class=&quot;c1&quot;&gt;// if want to use Twitter&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;$post&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;setServiceAdapter&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;TwitterService&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;());&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;// OR&lt;/span&gt;
+
+&lt;span class=&quot;c1&quot;&gt;// if want to use Instagram&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;$post&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;setServiceAdapter&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;InstagramService&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;());&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;// OR maybe&lt;/span&gt;
+
+&lt;span class=&quot;c1&quot;&gt;// if want to use Facebook or another social network adapter&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;$post&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;setServiceAdapter&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;FacebookService&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;());&lt;/span&gt;
+
+&lt;span class=&quot;nv&quot;&gt;$post&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;description&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;My first post to Twitter. Just for fun!&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;$post&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;url&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;http://juniorgrossi.com&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;$post&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;send&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;This way you can create new adapters without change your &lt;code&gt;Post&lt;/code&gt; code. Your &lt;code&gt;Post&lt;/code&gt; class use a &lt;strong&gt;Interface&lt;/strong&gt; and only classes that implements that interface will have those methods, the methods that &lt;code&gt;Post&lt;/code&gt; class uses to send a post.&lt;/p&gt;
+&lt;p&gt;That&#39;s all! I wish explain a little about the &lt;strong&gt;Adapter Pattern&lt;/strong&gt;. If you can improve this post with another example or correcting me with something please tell me. You are welcome to contribute and share!&lt;/p&gt;
+&lt;p&gt;Thanks for reading!&lt;/p&gt;
+</description>
+        <pubDate>Mon, 24 Jun 2013 03:08:29 -0300</pubDate>
+        <link>http://grossi.io/2013/design-patterns-with-php-adapters</link>
+        <guid isPermaLink="true">http://grossi.io/2013/design-patterns-with-php-adapters</guid>
+        
+        
+        <category>php</category>
+        
+        <category>design patterns</category>
+        
+      </item>
+    
+      <item>
+        <title>Testing your Packagist/Composer package locally</title>
+        <description>&lt;p&gt;Hello again! It&#39;s my second post today! I&#39;m electric!&lt;/p&gt;
+&lt;p&gt;I am developing a project that uses a package I&#39;m developing too. So, it is a real time test project. I find a new way to do something and write it inside my package and uses that.&lt;/p&gt;
+&lt;p&gt;But sometimes this is a boring work. I am sharing my package in the Packagist website using Composer, and everything I change I have to commit, push to GitHub and update my project with Composer, to get the new code I&#39;ve wrote. That&#39;s a very very bad idea.&lt;/p&gt;
+&lt;p&gt;Yesterday I was talking with my friend &lt;a href=&quot;http://twitter.com/diegoholiveira&quot;&gt;@diegoholiveira&lt;/a&gt; about to test the package locally and we&#39;ve found a easy solution. You can change the package you are developing and use that in the project that uses it. We were trying to find an easy way to do that using Composer, but the solution was easier than that. Just use symbolic links.&lt;/p&gt;
+&lt;p&gt;&lt;a id=&quot;more&quot;&gt;&lt;/a&gt;&lt;a id=&quot;more-625&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;h2&gt;Structure&lt;/h2&gt;
+&lt;p&gt;Ok. Let&#39;s assume you are developing a website. This website have to generate passwords with some particularities. So you decide to develop a package to provide this password generation and use it inside the website project. So you have 2 distinct projects:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-php&quot; data-lang=&quot;php&quot;&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;home&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;me&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;projects&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;website&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;home&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;me&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;projects&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;password&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;generator&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Let&#39;s assume your &lt;strong&gt;password-generator&lt;/strong&gt; is a package inside the &quot;yourname&quot; vendor. So the package name will be:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-php&quot; data-lang=&quot;php&quot;&gt;&lt;span class=&quot;nx&quot;&gt;yourname&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;password&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;generator&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;First you have to have installed at least a basic version of your package. You can submit a very basic package to Packagist, where you will install from. You add the package information inside your &lt;code&gt;composer.json&lt;/code&gt; file and &lt;code&gt;composer install&lt;/code&gt; or &lt;code&gt;composer update&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;Good. If you were installing this package inside your &lt;strong&gt;website&lt;/strong&gt; project you will have the follow structure using Composer:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-php&quot; data-lang=&quot;php&quot;&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;home&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;me&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;projects&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;website&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;vendor&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;myname&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;password&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;generator&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/*.*&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;But you already have you code inside:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-php&quot; data-lang=&quot;php&quot;&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;home&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;me&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;projects&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;password&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;generator&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;So, create a symbolic link from your package to your website:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-php&quot; data-lang=&quot;php&quot;&gt;&lt;span class=&quot;nx&quot;&gt;ln&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;s&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;home&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;me&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;projects&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;password&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;generator&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;home&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;me&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;projects&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;website&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;vendor&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;myname&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;password&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;generator&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;After that you must update the Composer autoload to find that new files. Inside your /website folder:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-php&quot; data-lang=&quot;php&quot;&gt;&lt;span class=&quot;nx&quot;&gt;composer&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;dump&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;autoload&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Ready! Everything you change in the package &lt;strong&gt;password-generator&lt;/strong&gt; you will can use inside your &lt;strong&gt;website&lt;/strong&gt; project. If you created some new class, maybe you must run &lt;code&gt;composer dump-autoload&lt;/code&gt; again to update files.&lt;/p&gt;
+&lt;p&gt;When you want, just commit, push your package to GitHub and share!&lt;/p&gt;
+</description>
+        <pubDate>Fri, 21 Jun 2013 15:15:19 -0300</pubDate>
+        <link>http://grossi.io/2013/testing-your-packagistcomposer-package-locally</link>
+        <guid isPermaLink="true">http://grossi.io/2013/testing-your-packagistcomposer-package-locally</guid>
+        
+        
+        <category>php</category>
+        
+        <category>composer</category>
+        
+      </item>
+    
+      <item>
+        <title>Contributing with the PHP community</title>
+        <description>&lt;p&gt;Hi guys!&lt;/p&gt;
+&lt;p&gt;Everyone wants to contribute in some way with developers. Maybe you&#39;re thinking in a project to develop and share but you search at Google and find someone who already did that.&lt;/p&gt;
+&lt;p&gt;Maybe the answer to this problem is in front of you. Everything you do can be reused in a future project. If you&#39;re working in a project in the company you works, I&#39;m sure you have some piece of code that you had to thought to develop it. So you can contribute.&lt;/p&gt;
+&lt;p&gt;I am now developing the Wordpress Corcel, that is a small set of classes that works in a Wordpress database, retrieving data and working with them. It uses the Eloquent ORM, developed for the Laravel Framework.&lt;/p&gt;
+&lt;p&gt;This project is the result of a project we&#39;re developing inside my advertising company. We had to integrate some libraries and databases with a Wordpress installation but Wordpress was too closed to do that, so we started to work in some classes that with Composer we&#39;ll can use in that project, using Slim Framework or another framework that uses Composer too.&lt;/p&gt;
+&lt;p&gt;&lt;a id=&quot;more&quot;&gt;&lt;/a&gt;&lt;a id=&quot;more-621&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;That&#39;s the idea! Maybe that set of classes won&#39;t be good for anyone, but maybe it can be useful for one or two developers, and it&#39;s the best. Only that justifies everything.&lt;/p&gt;
+&lt;p&gt;You can invent something to share and maybe it will be good enough for others. But the best open source tools we&#39;re using today was extracted from private projects in private companies. Take the Ruby on Rails example. Hanson extracted it developing the 37signals&#39;s product Basecamp. Taylor Otwell extracted Laravel from a private project at Userscape, company he works. Maybe you can contribute with simple things, that you only have to extract and share, just that.&lt;/p&gt;
+&lt;h2&gt;Be a better developer&lt;/h2&gt;
+&lt;p&gt;I started to write this post with a objetive but now I have another one. I am doing my best to improve my knowledges, reading more, writing more, developing more, talking more, contributing more, etc. And I have to say the best way to share is knowing more, is developing better.&lt;/p&gt;
+&lt;p&gt;I am always studying about Design Patters more and more. You can write a entire project using Laravel or Zend, and it can be a very good one, without errors, tested and more. But if you developed everything inside the framework you can&#39;t extract it and share. And if you want to do that you have to develop better, you have to use Design Patterns.&lt;/p&gt;
+&lt;p&gt;This way, every time you start a new project, start another one! One will be your project, using Laravel or Zend, and another a small package with useful classes that you can reuse and share later. Pay attention to use some Design Patterns and do your best to be a better developer. After that, you will have a package to share, and it can be interesting for one or two developers, maybe more and more. That&#39;s good.&lt;/p&gt;
+&lt;p&gt;If you don&#39;t have enough experience using patterns you can try. Maybe you are reading about &quot;Adapters&quot; and you can apply it inside your current project. This way you can write more and practice what you are learning. And you will be a better developer, I&#39;m sure!&lt;/p&gt;
+&lt;p&gt;I think that&#39;s the message I want to give you. You can do that better and everyone wins. If you are learning english the best way to improve it is writing, talking and missing (like me :D). And if you want to be a better developer you have to code, but code the right way, and share.&lt;/p&gt;
+</description>
+        <pubDate>Fri, 21 Jun 2013 14:55:15 -0300</pubDate>
+        <link>http://grossi.io/2013/contributing-with-the-php-community</link>
+        <guid isPermaLink="true">http://grossi.io/2013/contributing-with-the-php-community</guid>
+        
+        
+        <category>php</category>
+        
+      </item>
+    
+      <item>
+        <title>Installing ssh-copy-id on MAC and connect through SSH without password</title>
+        <description>&lt;h2&gt;Update September, 1st 2014&lt;/h2&gt;
+&lt;p&gt;The newer versions of port does not include the &lt;code&gt;ssh-copy-id&lt;/code&gt; package anymore, but you can still use it cloning this repo from Github: &lt;a href=&quot;https://github.com/beautifulcode/ssh-copy-id-for-OSX&quot;&gt;https://github.com/beautifulcode/ssh-copy-id-for-OSX&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Hello everybody! I have some servers and always I have to login using SSH, but some passwords is very complex. So, you must copy your public key to the desired server and be happy.&lt;/p&gt;
+&lt;h2&gt;Installing the command ssh-copy-id&lt;/h2&gt;
+&lt;p&gt;I used to use &lt;strong&gt;mac ports&lt;/strong&gt; to install packages on my Mac, so: sudo port install ssh-copy-id Now you have the command installed on &lt;em&gt;/opt/local/bin/ssh-copy-id&lt;/em&gt;. Just create a symbolic link to that: sudo ln -s /opt/local/bin/ssh-copy-id /usr/bin/ssh-copy-id&lt;/p&gt;
+&lt;p&gt;&lt;a id=&quot;more&quot;&gt;&lt;/a&gt;&lt;a id=&quot;more-607&quot;&gt;&lt;/a&gt;&lt;/p&gt;
+&lt;h2&gt;Copying your public key to server&lt;/h2&gt;
+&lt;p&gt;Now you only have to run the command and be happy! The server will ask for password, and this will be the last time you type the code!&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-php&quot; data-lang=&quot;php&quot;&gt;&lt;span class=&quot;nx&quot;&gt;ssh&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;copy&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;id&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;~/.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;ssh&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;id_rsa&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;pub&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;username&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;@&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;example&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;com&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;This&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;way&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;you&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;&amp;#39;&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;ll&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;registering&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;your&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;key&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;the&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;username&amp;quot;&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;user&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;at&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;example.com&amp;quot;&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;server&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;h2&gt;Alternative way&lt;/h2&gt;
+&lt;p&gt;You can too copy your &lt;em&gt;id_rsa.pub&lt;/em&gt; file content, login inside the server and append the file content to &lt;em&gt;/home/username/.ssh/authorized_keys&lt;/em&gt;. The effect will be the same, but I think using &lt;em&gt;ssh-copy-id&lt;/em&gt; is easier and quickly. Now when you try to login to server using ssh, like &lt;em&gt;ssh username@example.com&lt;/em&gt; you&#39;ll have direct access! Thank you!&lt;/p&gt;
+&lt;h1&gt;Update Oct 9 2013&lt;/h1&gt;
+&lt;p&gt;An easy way to do that, without install nothing:&lt;/p&gt;
+&lt;h2&gt;Check if id_rsa.pub exists&lt;/h2&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-php&quot; data-lang=&quot;php&quot;&gt;&lt;span class=&quot;nx&quot;&gt;cd&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;~/.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;ssh&lt;/span&gt;
+&lt;span class=&quot;nx&quot;&gt;ls&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;If you found &lt;strong&gt;id_rsa.pub&lt;/strong&gt; go to the next topic. If not do the following to create one public key:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-php&quot; data-lang=&quot;php&quot;&gt;&lt;span class=&quot;nx&quot;&gt;cd&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;~/.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;ssh&lt;/span&gt; 
+&lt;span class=&quot;nx&quot;&gt;ssh&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;keygen&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;t&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;rsa&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;C&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;your_email@example.com&amp;quot;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Creates a new ssh key, using the provided email as a label &lt;/li&gt;
+&lt;li&gt;Generating public/private rsa key pair. &lt;/li&gt;
+&lt;li&gt;Enter file in which to save the key (/Users/you/.ssh/id_rsa): [Press enter]&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;After that:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-php&quot; data-lang=&quot;php&quot;&gt;&lt;span class=&quot;nx&quot;&gt;ssh&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;add&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;id_rsa&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;h2&gt;Copying your public key to remote server&lt;/h2&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-php&quot; data-lang=&quot;php&quot;&gt;&lt;span class=&quot;nx&quot;&gt;cat&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;~/.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;ssh&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;id_rsa&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;pub&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;ssh&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;user&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;@&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;example&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;org&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;cat &amp;gt;&amp;gt; /home/user/.ssh/authorized_keys&amp;#39;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Done!&lt;/p&gt;
+</description>
+        <pubDate>Wed, 17 Apr 2013 18:31:44 -0300</pubDate>
+        <link>http://grossi.io/2013/installing-ssh-copy-id-on-mac-and-connect-through-ssh-without-password</link>
+        <guid isPermaLink="true">http://grossi.io/2013/installing-ssh-copy-id-on-mac-and-connect-through-ssh-without-password</guid>
+        
+        
+        <category>mac osx</category>
+        
+      </item>
+    
+  </channel>
+</rss>

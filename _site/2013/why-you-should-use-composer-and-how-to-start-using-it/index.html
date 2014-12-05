@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width initial-scale=1">
+
+  <title>Why you should use Composer and how to start using it | Junior Grossi</title>
+  <meta name="description" content="One of the most big changes happening in PHP world is the Composer. I'm shure you heard about it but maybe you don't know why you should use it and how much ...">
+
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="canonical" href="http://grossi.io/2013/why-you-should-use-composer-and-how-to-start-using-it">
+  <link rel="alternate" type="application/atom+xml" title="Junior Grossi" href="http://grossi.io/feed.xml" />
+
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-24490124-1', 'auto');
+    ga('send', 'pageview');
+  </script>
+  
+</head>
+
+
+  <body>
+
+    <header class="site-header">
+
+  <div class="wrapper">
+
+    <a class="site-title" href="/">Junior Grossi </a>
+
+    <nav class="site-nav">
+      <a href="#" class="menu-icon">
+        <svg viewBox="0 0 18 15">
+          <path fill="#424242" d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.031C17.335,0,18,0.665,18,1.484L18,1.484z"/>
+          <path fill="#424242" d="M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0c0-0.82,0.665-1.484,1.484-1.484 h15.031C17.335,6.031,18,6.696,18,7.516L18,7.516z"/>
+          <path fill="#424242" d="M18,13.516C18,14.335,17.335,15,16.516,15H1.484C0.665,15,0,14.335,0,13.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.031C17.335,12.031,18,12.696,18,13.516L18,13.516z"/>
+        </svg>
+      </a>
+
+      <div class="trigger">
+        
+          
+          <a class="page-link" href="/about/">About</a>
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+          
+        
+      </div>
+    </nav>
+
+  </div>
+
+</header>
+
+
+    <div class="page-content">
+      <div class="wrapper">
+        <div class="post">
+
+  <header class="post-header">
+    <h1 class="post-title">Why you should use Composer and how to start using it</h1>
+    <p class="post-meta">Jan 26, 2013</p>
+  </header>
+
+  <article class="post-content">
+    <p>Hello!</p>
+<p>One of the most big changes happening in PHP world is the <a href="http://getcomposer.org">Composer</a>. I'm shure you heard about it but maybe you don't know why you should use it and how much it is good for you and your projects.</p>
+<h2>What is Composer?</h2>
+<p>When you need some specific code in PHP you can go to <a href="http://phpclasses.org">PHP Classes</a> and search for what you need. For example, you need a class to connect to your Twitter account and get the last updates in your timeline. Ok, you'll find it easy. And what you have to do after? You download the classe and copy to some place inside your project, and call it <em>including</em> or <em>requiring</em> it inside your PHP code, right?</p>
+<p>Well, you can use <a href="http://pear.php.net">Pear</a> to. You must install it on your server and install some components that you can use like a package manager. This work too but nothing is installed inside your project structure, but in your machine.</p>
+<p>Ok. <em>Composer</em> came to solve all this questions. Together with <em>Composer</em> we have some rules, making all PHP project with the same structure, using <em>namespaces</em>, the same code style, etc. This simplifies when you have to include some third-party code or project. This rules you can find at <a href="http://www.php-fig.org/">PHP Fig (PHP Framework Interop Group)</a>. I really suggest you to take a look at <a href="http://phptherightway.com">phptherightway.com</a>. There you'll find a lot of information to made you a good PHP developer using what we have of better in PHP world.</p>
+<p><a id="more"></a><a id="more-546"></a></p>
+<p>Let's take a example. You created a new project using the framework <a href="http://laravel.com">Laravel 4</a> and you have to use the <a href="http://delicious.com">Amazon</a> API. But <a href="http://framework.zend.com">Zend Framework</a> has done that for you. They have classes that do the job, and you don't need to do everything again, just reuse the code that is already developed. You can use its packages to include the Zend Framework's Amazon API inside your project.</p>
+<p>OK! But they are different frameworks! You're right, but both Laravel and Zend Framework support <em>Composer</em> and you can use it to include sources inside your project. So it's right! You can add <strong>only</strong> <em>ZendService\Amazon</em> inside your Laravel project, because Zend Framework was developed as many projects inside one, and all them are developed using Composer too. Autoload will be already configured for you, so, you don't have to include files, nothing, just call them and PHP take care of the rest.</p>
+<h2>Comparative</h2>
+<p><em>Composer</em> works like <a href="http://rubygems.org">Ruby Gems</a>. You have a program that runs in the command line and you can install what you want. You tell <em>Composer</em> to install <em>ZendService\Amazon</em> and it will copy and configure it for you inside your <em>vendor</em> directory. Easy like that.</p>
+<h2>Installing Composer</h2>
+<p>Installing Composer is easy. You can get information about Composer installing at <a href="http://getcomposer.org">getcomposer.org</a>. Go to your new project folder and do the follow:</p>
+
+<div class="highlight"><pre><code class="language-php" data-lang="php"><span class="nx">curl</span> <span class="o">-</span><span class="nx">s</span> <span class="nx">https</span><span class="o">://</span><span class="nx">getcomposer</span><span class="o">.</span><span class="nx">org</span><span class="o">/</span><span class="nx">installer</span> <span class="o">|</span> <span class="nx">php</span></code></pre></div>
+
+<p>This will install Composer for you. Now you have a <em>composer.phar</em> file inside your project main dir. Ok! But this way you'll can use Composer only for this project. I prefer to move this <em>composer.phar</em> to <em>/usr/bin/</em> and make Composer globally.</p>
+
+<div class="highlight"><pre><code class="language-php" data-lang="php"><span class="nx">sudo</span> <span class="nx">mv</span> <span class="nx">composer</span><span class="o">.</span><span class="nx">phar</span> <span class="o">/</span><span class="nx">usr</span><span class="o">/</span><span class="nx">bin</span><span class="o">/</span><span class="nx">composer</span></code></pre></div>
+
+<p>Now you have the <strong>composer</strong> command and you can use it where you want.</p>
+<h2>Instaling Laravel using Composer</h2>
+<p>Now you must create our Laravel 4 Beta project. Inside the folder you'll clone the "develop" branch of Laravel 4 repository:</p>
+
+<div class="highlight"><pre><code class="language-php" data-lang="php"><span class="nx">git</span> <span class="k">clone</span> <span class="o">-</span><span class="nx">b</span> <span class="nx">develop</span> <span class="nx">git</span><span class="o">://</span><span class="nx">github</span><span class="o">.</span><span class="nx">com</span><span class="o">/</span><span class="nx">laravel</span><span class="o">/</span><span class="nx">laravel</span><span class="o">.</span><span class="nx">git</span>
+<span class="nx">Cloning</span> <span class="nx">into</span> <span class="s1">&#39;laravel&#39;</span><span class="o">...</span>
+<span class="nx">remote</span><span class="o">:</span> <span class="nx">Counting</span> <span class="nx">objects</span><span class="o">:</span> <span class="mi">19925</span><span class="p">,</span> <span class="nx">done</span><span class="o">.</span>
+<span class="nx">remote</span><span class="o">:</span> <span class="nx">Compressing</span> <span class="nx">objects</span><span class="o">:</span> <span class="mi">100</span><span class="o">%</span> <span class="p">(</span><span class="mi">6296</span><span class="o">/</span><span class="mi">6296</span><span class="p">),</span> <span class="nx">done</span><span class="o">.</span>
+<span class="nx">remote</span><span class="o">:</span> <span class="nx">Total</span> <span class="mi">19925</span> <span class="p">(</span><span class="nx">delta</span> <span class="mi">14021</span><span class="p">),</span> <span class="nx">reused</span> <span class="mi">19135</span> <span class="p">(</span><span class="nx">delta</span> <span class="mi">13339</span><span class="p">)</span>
+<span class="nx">Receiving</span> <span class="nx">objects</span><span class="o">:</span> <span class="mi">100</span><span class="o">%</span> <span class="p">(</span><span class="mi">19925</span><span class="o">/</span><span class="mi">19925</span><span class="p">),</span> <span class="mf">4.45</span> <span class="nx">MiB</span> <span class="o">|</span> <span class="mi">322</span> <span class="nx">KiB</span><span class="o">/</span><span class="nx">s</span><span class="p">,</span> <span class="nx">done</span><span class="o">.</span>
+<span class="nx">Resolving</span> <span class="nx">deltas</span><span class="o">:</span> <span class="mi">100</span><span class="o">%</span> <span class="p">(</span><span class="mi">14021</span><span class="o">/</span><span class="mi">14021</span><span class="p">),</span> <span class="nx">done</span><span class="o">.</span>
+<span class="c1">//  listing</span>
+<span class="nx">ls</span>
+<span class="nx">laravel</span>
+<span class="nx">cd</span> <span class="nx">laravel</span>
+<span class="nx">ls</span>
+<span class="nx">CONTRIBUTING</span><span class="o">.</span><span class="nx">md</span>  <span class="nx">app</span>  <span class="nx">artisan</span>  <span class="nx">bootstrap</span>  <span class="nx">composer</span><span class="o">.</span><span class="nx">json</span>  <span class="nx">phpunit</span><span class="o">.</span><span class="nx">xml</span>  <span class="k">public</span>  <span class="nx">readme</span><span class="o">.</span><span class="nx">md</span>  <span class="nx">server</span><span class="o">.</span><span class="nx">php</span>  <span class="nx">start</span><span class="o">.</span><span class="nx">php</span></code></pre></div>
+
+<p>Well. Now we have Laravel structure copied to our project folder. Now we have to install dependencies for Laravel, using Composer. This will install everything you need to run Laravel.</p>
+
+<div class="highlight"><pre><code class="language-php" data-lang="php"><span class="nx">composer</span> <span class="nx">install</span></code></pre></div>
+
+<p>You said Composer to install everything this project need. In other words you said it to install Laravel framework, that is a lot of small projects. You can see that exists a <strong>composer.json</strong> file inside this folder. There you can see everything this project (Laravel) needs to run. Composer will look inside this file and install everything it needs. You have a output like that:</p>
+
+<div class="highlight"><pre><code class="language-php" data-lang="php"><span class="nx">Loading</span> <span class="nx">composer</span> <span class="nx">repositories</span> <span class="nx">with</span> <span class="nx">package</span> <span class="nx">information</span>
+<span class="nx">Installing</span> <span class="nx">dependencies</span>
+  <span class="o">-</span> <span class="nx">Installing</span> <span class="nx">ircmaxell</span><span class="o">/</span><span class="nx">password</span><span class="o">-</span><span class="nx">compat</span> <span class="p">(</span><span class="mf">1.0</span><span class="o">.</span><span class="nx">x</span><span class="o">-</span><span class="nx">dev</span> <span class="nx">v1</span><span class="o">.</span><span class="mf">0.0</span><span class="p">)</span>
+    <span class="nx">Cloning</span> <span class="nx">v1</span><span class="o">.</span><span class="mf">0.0</span>
+
+  <span class="o">-</span> <span class="nx">Installing</span> <span class="nx">symfony</span><span class="o">/</span><span class="nx">translation</span> <span class="p">(</span><span class="nx">dev</span><span class="o">-</span><span class="nx">master</span> <span class="nx">v2</span><span class="o">.</span><span class="mf">2.0</span><span class="o">-</span><span class="nx">BETA2</span><span class="p">)</span>
+    <span class="nx">Cloning</span> <span class="nx">v2</span><span class="o">.</span><span class="mf">2.0</span><span class="o">-</span><span class="nx">BETA2</span>
+
+  <span class="o">-</span> <span class="nx">Installing</span> <span class="nx">psr</span><span class="o">/</span><span class="nb">log</span> <span class="p">(</span><span class="mf">1.0</span><span class="o">.</span><span class="mi">0</span><span class="p">)</span>
+    <span class="nx">Loading</span> <span class="nx">from</span> <span class="nx">cache</span>
+
+  <span class="o">-</span> <span class="nx">Installing</span> <span class="nx">symfony</span><span class="o">/</span><span class="nx">routing</span> <span class="p">(</span><span class="nx">dev</span><span class="o">-</span><span class="nx">master</span> <span class="nx">de9d647</span><span class="p">)</span>
+    <span class="nx">Cloning</span> <span class="nx">de9d64780254f45cfa9d9e49602d0a63acf45f75</span>
+
+  <span class="o">-</span> <span class="nx">Installing</span> <span class="nx">symfony</span><span class="o">/</span><span class="nx">process</span> <span class="p">(</span><span class="nx">dev</span><span class="o">-</span><span class="nx">master</span> <span class="nx">v2</span><span class="o">.</span><span class="mf">2.0</span><span class="o">-</span><span class="nx">BETA2</span><span class="p">)</span>
+    <span class="nx">Cloning</span> <span class="nx">v2</span><span class="o">.</span><span class="mf">2.0</span><span class="o">-</span><span class="nx">BETA2</span>
+
+  <span class="o">-</span> <span class="nx">Installing</span> <span class="nx">symfony</span><span class="o">/</span><span class="nx">http</span><span class="o">-</span><span class="nx">foundation</span> <span class="p">(</span><span class="nx">dev</span><span class="o">-</span><span class="nx">master</span> <span class="nx">v2</span><span class="o">.</span><span class="mf">2.0</span><span class="o">-</span><span class="nx">BETA2</span><span class="p">)</span>
+    <span class="nx">Cloning</span> <span class="nx">v2</span><span class="o">.</span><span class="mf">2.0</span><span class="o">-</span><span class="nx">BETA2</span>
+
+  <span class="o">-</span> <span class="nx">Installing</span> <span class="nx">symfony</span><span class="o">/</span><span class="nx">event</span><span class="o">-</span><span class="nx">dispatcher</span> <span class="p">(</span><span class="nx">dev</span><span class="o">-</span><span class="nx">master</span> <span class="nx">v2</span><span class="o">.</span><span class="mf">2.0</span><span class="o">-</span><span class="nx">BETA2</span><span class="p">)</span>
+    <span class="nx">Cloning</span> <span class="nx">v2</span><span class="o">.</span><span class="mf">2.0</span><span class="o">-</span><span class="nx">BETA2</span>
+
+  <span class="o">-</span> <span class="nx">Installing</span> <span class="nx">symfony</span><span class="o">/</span><span class="nx">http</span><span class="o">-</span><span class="nx">kernel</span> <span class="p">(</span><span class="nx">dev</span><span class="o">-</span><span class="nx">master</span> <span class="mi">7</span><span class="nx">d704da</span><span class="p">)</span>
+    <span class="nx">Cloning</span> <span class="mi">7</span><span class="nx">d704da42ca56c3f58530a0023a2d532d67005d1</span>
+
+  <span class="o">-</span> <span class="nx">Installing</span> <span class="nx">symfony</span><span class="o">/</span><span class="nx">finder</span> <span class="p">(</span><span class="nx">dev</span><span class="o">-</span><span class="nx">master</span> <span class="nx">v2</span><span class="o">.</span><span class="mf">2.0</span><span class="o">-</span><span class="nx">BETA2</span><span class="p">)</span>
+    <span class="nx">Cloning</span> <span class="nx">v2</span><span class="o">.</span><span class="mf">2.0</span><span class="o">-</span><span class="nx">BETA2</span>
+
+  <span class="o">-</span> <span class="nx">Installing</span> <span class="nx">symfony</span><span class="o">/</span><span class="nx">dom</span><span class="o">-</span><span class="nx">crawler</span> <span class="p">(</span><span class="nx">dev</span><span class="o">-</span><span class="nx">master</span> <span class="nx">v2</span><span class="o">.</span><span class="mf">2.0</span><span class="o">-</span><span class="nx">BETA2</span><span class="p">)</span>
+    <span class="nx">Cloning</span> <span class="nx">v2</span><span class="o">.</span><span class="mf">2.0</span><span class="o">-</span><span class="nx">BETA2</span>
+
+  <span class="o">-</span> <span class="nx">Installing</span> <span class="nx">symfony</span><span class="o">/</span><span class="nx">css</span><span class="o">-</span><span class="nx">selector</span> <span class="p">(</span><span class="nx">dev</span><span class="o">-</span><span class="nx">master</span> <span class="nx">v2</span><span class="o">.</span><span class="mf">2.0</span><span class="o">-</span><span class="nx">BETA2</span><span class="p">)</span>
+    <span class="nx">Cloning</span> <span class="nx">v2</span><span class="o">.</span><span class="mf">2.0</span><span class="o">-</span><span class="nx">BETA2</span>
+
+  <span class="o">-</span> <span class="nx">Installing</span> <span class="nx">symfony</span><span class="o">/</span><span class="nx">console</span> <span class="p">(</span><span class="nx">dev</span><span class="o">-</span><span class="nx">master</span> <span class="nx">fdb2d93</span><span class="p">)</span>
+    <span class="nx">Cloning</span> <span class="nx">fdb2d9320106926266a0f7a5a97aab7213e11ad6</span>
+
+  <span class="o">-</span> <span class="nx">Installing</span> <span class="nx">symfony</span><span class="o">/</span><span class="nx">browser</span><span class="o">-</span><span class="nx">kit</span> <span class="p">(</span><span class="nx">dev</span><span class="o">-</span><span class="nx">master</span> <span class="nx">v2</span><span class="o">.</span><span class="mf">2.0</span><span class="o">-</span><span class="nx">BETA2</span><span class="p">)</span>
+    <span class="nx">Cloning</span> <span class="nx">v2</span><span class="o">.</span><span class="mf">2.0</span><span class="o">-</span><span class="nx">BETA2</span>
+
+  <span class="o">-</span> <span class="nx">Installing</span> <span class="nx">swiftmailer</span><span class="o">/</span><span class="nx">swiftmailer</span> <span class="p">(</span><span class="nx">dev</span><span class="o">-</span><span class="nx">master</span> <span class="mi">3</span><span class="nx">aec9a3</span><span class="p">)</span>
+    <span class="nx">Cloning</span> <span class="mi">3</span><span class="nx">aec9a30346ebf54100a38ba7c71fb8aafae3e9a</span>
+
+  <span class="o">-</span> <span class="nx">Installing</span> <span class="nx">monolog</span><span class="o">/</span><span class="nx">monolog</span> <span class="p">(</span><span class="mf">1.3</span><span class="o">.</span><span class="mi">1</span><span class="p">)</span>
+    <span class="nx">Loading</span> <span class="nx">from</span> <span class="nx">cache</span>
+
+  <span class="o">-</span> <span class="nx">Installing</span> <span class="nx">laravel</span><span class="o">/</span><span class="nx">framework</span> <span class="p">(</span><span class="nx">dev</span><span class="o">-</span><span class="nx">master</span> <span class="nx">b3e7df7</span><span class="p">)</span>
+    <span class="nx">Cloning</span> <span class="nx">b3e7df7894161dcc78d9f2dc11f33f3249c4fdbb</span>
+
+<span class="nx">symfony</span><span class="o">/</span><span class="nx">translation</span> <span class="nx">suggests</span> <span class="nx">installing</span> <span class="nx">symfony</span><span class="o">/</span><span class="nx">config</span> <span class="p">(</span><span class="mf">2.2</span><span class="o">.*</span><span class="p">)</span>
+<span class="nx">symfony</span><span class="o">/</span><span class="nx">translation</span> <span class="nx">suggests</span> <span class="nx">installing</span> <span class="nx">symfony</span><span class="o">/</span><span class="nx">yaml</span> <span class="p">(</span><span class="mf">2.2</span><span class="o">.*</span><span class="p">)</span>
+<span class="nx">symfony</span><span class="o">/</span><span class="nx">routing</span> <span class="nx">suggests</span> <span class="nx">installing</span> <span class="nx">doctrine</span><span class="o">/</span><span class="nx">common</span> <span class="p">(</span><span class="o">&gt;=</span><span class="mf">2.2</span><span class="p">,</span><span class="o">&lt;</span><span class="mf">2.4</span><span class="o">-</span><span class="nx">dev</span><span class="p">)</span>
+<span class="nx">symfony</span><span class="o">/</span><span class="nx">routing</span> <span class="nx">suggests</span> <span class="nx">installing</span> <span class="nx">symfony</span><span class="o">/</span><span class="nx">config</span> <span class="p">(</span><span class="mf">2.2</span><span class="o">.*</span><span class="p">)</span>
+<span class="nx">symfony</span><span class="o">/</span><span class="nx">routing</span> <span class="nx">suggests</span> <span class="nx">installing</span> <span class="nx">symfony</span><span class="o">/</span><span class="nx">yaml</span> <span class="p">(</span><span class="mf">2.2</span><span class="o">.*</span><span class="p">)</span>
+<span class="nx">symfony</span><span class="o">/</span><span class="nx">event</span><span class="o">-</span><span class="nx">dispatcher</span> <span class="nx">suggests</span> <span class="nx">installing</span> <span class="nx">symfony</span><span class="o">/</span><span class="nx">dependency</span><span class="o">-</span><span class="nx">injection</span> <span class="p">(</span><span class="mf">2.2</span><span class="o">.*</span><span class="p">)</span>
+<span class="nx">symfony</span><span class="o">/</span><span class="nx">http</span><span class="o">-</span><span class="nx">kernel</span> <span class="nx">suggests</span> <span class="nx">installing</span> <span class="nx">symfony</span><span class="o">/</span><span class="nx">class</span><span class="o">-</span><span class="nx">loader</span> <span class="p">(</span><span class="mf">2.2</span><span class="o">.*</span><span class="p">)</span>
+<span class="nx">symfony</span><span class="o">/</span><span class="nx">http</span><span class="o">-</span><span class="nx">kernel</span> <span class="nx">suggests</span> <span class="nx">installing</span> <span class="nx">symfony</span><span class="o">/</span><span class="nx">config</span> <span class="p">(</span><span class="mf">2.2</span><span class="o">.*</span><span class="p">)</span>
+<span class="nx">symfony</span><span class="o">/</span><span class="nx">http</span><span class="o">-</span><span class="nx">kernel</span> <span class="nx">suggests</span> <span class="nx">installing</span> <span class="nx">symfony</span><span class="o">/</span><span class="nx">dependency</span><span class="o">-</span><span class="nx">injection</span> <span class="p">(</span><span class="mf">2.2</span><span class="o">.*</span><span class="p">)</span>
+<span class="nx">monolog</span><span class="o">/</span><span class="nx">monolog</span> <span class="nx">suggests</span> <span class="nx">installing</span> <span class="nx">mlehner</span><span class="o">/</span><span class="nx">gelf</span><span class="o">-</span><span class="nx">php</span> <span class="p">(</span><span class="nx">Allow</span> <span class="nx">sending</span> <span class="nb">log</span> <span class="nx">messages</span> <span class="nx">to</span> <span class="nx">a</span> <span class="nx">GrayLog2</span> <span class="nx">server</span><span class="p">)</span>
+<span class="nx">monolog</span><span class="o">/</span><span class="nx">monolog</span> <span class="nx">suggests</span> <span class="nx">installing</span> <span class="nx">raven</span><span class="o">/</span><span class="nx">raven</span> <span class="p">(</span><span class="nx">Allow</span> <span class="nx">sending</span> <span class="nb">log</span> <span class="nx">messages</span> <span class="nx">to</span> <span class="nx">a</span> <span class="nx">Sentry</span> <span class="nx">server</span><span class="p">)</span>
+<span class="nx">monolog</span><span class="o">/</span><span class="nx">monolog</span> <span class="nx">suggests</span> <span class="nx">installing</span> <span class="nx">doctrine</span><span class="o">/</span><span class="nx">couchdb</span> <span class="p">(</span><span class="nx">Allow</span> <span class="nx">sending</span> <span class="nb">log</span> <span class="nx">messages</span> <span class="nx">to</span> <span class="nx">a</span> <span class="nx">CouchDB</span> <span class="nx">server</span><span class="p">)</span>
+<span class="nx">monolog</span><span class="o">/</span><span class="nx">monolog</span> <span class="nx">suggests</span> <span class="nx">installing</span> <span class="nx">ext</span><span class="o">-</span><span class="nx">amqp</span> <span class="p">(</span><span class="nx">Allow</span> <span class="nx">sending</span> <span class="nb">log</span> <span class="nx">messages</span> <span class="nx">to</span> <span class="nx">an</span> <span class="nx">AMQP</span> <span class="nx">server</span> <span class="p">(</span><span class="mf">1.0</span><span class="o">+</span> <span class="nx">required</span><span class="p">))</span>
+<span class="nx">Writing</span> <span class="nx">lock</span> <span class="nb">file</span>
+<span class="nx">Generating</span> <span class="nx">autoload</span> <span class="nx">files</span></code></pre></div>
+
+<p>Good. If you take a look in the output, you can see Laravel uses some components of <a href="http://symfony.com">Symfony2</a>, that is another excellent framework that uses Composer too. This show you how Composer is powerful and how you can add inside your project everything using Composer.</p>
+<p>If you want to use ZendFramework's Amazon API (ZendService\Amazon) you can edit the <strong>composer.json</strong> file and add a new line, saying Composer you'll need that library too. After that just run <em>composer install</em> again and it will download and install <em>ZendService\Amazon</em> for you. Zend Framework packages can be found in <a href="http://packages.zendframework.com">http://packages.zendframework.com</a>.</p>
+
+<div class="highlight"><pre><code class="language-php" data-lang="php"><span class="s2">&quot;require&quot;</span><span class="o">:</span> <span class="p">{</span>
+    <span class="s2">&quot;zendframework/zendservice-amazon&quot;</span><span class="o">:</span> <span class="s2">&quot;2.0.*&quot;</span><span class="p">,</span>
+<span class="p">},</span></code></pre></div>
+
+<p>To use ZF2 packages you must add a repository too (<em>composer.json</em>):</p>
+
+<div class="highlight"><pre><code class="language-php" data-lang="php"><span class="s2">&quot;repositories&quot;</span><span class="o">:</span> <span class="p">[</span>
+    <span class="p">{</span>
+        <span class="s2">&quot;type&quot;</span><span class="o">:</span> <span class="s2">&quot;composer&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;url&quot;</span><span class="o">:</span> <span class="s2">&quot;https://packages.zendframework.com/&quot;</span>
+    <span class="p">}</span>
+<span class="p">],</span></code></pre></div>
+
+<h3>Checking everything installed</h3>
+<p>Now inside your project folder go to <em>vendor</em> directory and there you'll see a lot of third-party sources, like <em>symfony</em>, <em>swiftmailer</em> and more. You can see too a <em>autoload.php</em> file. That allow you to call these third-party sources using autoload, following the PHP-FIG rules.</p>
+<h2>Available Packages</h2>
+<p>As you saw inside <em>composer.json</em> this file contains everything you need to run the project, doing a simple reference like <strong>vendor/package</strong>. But where are these sources?</p>
+<p>Every packages you can use with Composer are stored in <a href="https://packagist.org/">Packagist</a> site. There you can browse packages and submit yours too. Simple like that. You have a website where you have a lot of good PHP sources you can use where you want just using Composer for that, and they were developed following the same rules and recommendations.</p>
+<h2>Conclusion</h2>
+<p>Composer is the future of PHP. PHP is undergoing good changes to improve the language. Composer is the Dependency Manager was missing, and is here to stay.</p>
+<p>I think I could give you a little explanation what you can do with Composer and how it works. If you'll start a new project, considere using frameworks that use Composer to smooth your third-party sources and make your project organized, like <a href="http://laravel.com">Laravel</a>, <a href="http://framework.zend.com">Zend Framework 2</a> or <a href="http://symfony.com">Symfony</a>.</p>
+<p>Thanks for reading.</p>
+
+  </article>
+
+  
+  <div class="disqus">
+    <div id="disqus_thread"></div>
+    <script type="text/javascript">
+        /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+        var disqus_shortname = 'grossi-io'; // required: replace example with your forum shortname
+
+        /* * * DON'T EDIT BELOW THIS LINE * * */
+        (function() {
+            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  </div>
+  
+
+</div>
+
+      </div>
+    </div>
+
+    <footer class="site-footer">
+
+  <div class="wrapper">
+
+    <!-- <h2 class="footer-heading">Junior Grossi</h2> -->
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col  footer-col-1">
+        <p>
+          <a href="http://grossi.io">
+            <img src="http://www.gravatar.com/avatar/7bb3a66a199daec275d5ad339724c754.png?s=100" alt="Junior Grossi">
+          </a>
+        </p>
+        <ul class="contact-list">
+          <li>Junior Grossi</li>
+          <li><a href="mailto:juniorgro@gmail.com">juniorgro@gmail.com</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col  footer-col-2">
+        <ul class="social-media-list">
+          
+          <li>
+            <a href="https://github.com/jgrossi">
+              <span class="icon  icon--github">
+                <svg viewBox="0 0 16 16">
+                  <path fill="#828282" d="M7.999,0.431c-4.285,0-7.76,3.474-7.76,7.761 c0,3.428,2.223,6.337,5.307,7.363c0.388,0.071,0.53-0.168,0.53-0.374c0-0.184-0.007-0.672-0.01-1.32 c-2.159,0.469-2.614-1.04-2.614-1.04c-0.353-0.896-0.862-1.135-0.862-1.135c-0.705-0.481,0.053-0.472,0.053-0.472 c0.779,0.055,1.189,0.8,1.189,0.8c0.692,1.186,1.816,0.843,2.258,0.645c0.071-0.502,0.271-0.843,0.493-1.037 C4.86,11.425,3.049,10.76,3.049,7.786c0-0.847,0.302-1.54,0.799-2.082C3.768,5.507,3.501,4.718,3.924,3.65 c0,0,0.652-0.209,2.134,0.796C6.677,4.273,7.34,4.187,8,4.184c0.659,0.003,1.323,0.089,1.943,0.261 c1.482-1.004,2.132-0.796,2.132-0.796c0.423,1.068,0.157,1.857,0.077,2.054c0.497,0.542,0.798,1.235,0.798,2.082 c0,2.981-1.814,3.637-3.543,3.829c0.279,0.24,0.527,0.713,0.527,1.437c0,1.037-0.01,1.874-0.01,2.129 c0,0.208,0.14,0.449,0.534,0.373c3.081-1.028,5.302-3.935,5.302-7.362C15.76,3.906,12.285,0.431,7.999,0.431z"/>
+                </svg>
+              </span>
+
+              <span class="username">jgrossi</span>
+            </a>
+          </li>
+          
+
+          
+          <li>
+            <a href="https://twitter.com/junior_grossi">
+              <span class="icon  icon--twitter">
+                <svg viewBox="0 0 16 16">
+                  <path fill="#828282" d="M15.969,3.058c-0.586,0.26-1.217,0.436-1.878,0.515c0.675-0.405,1.194-1.045,1.438-1.809
+                  c-0.632,0.375-1.332,0.647-2.076,0.793c-0.596-0.636-1.446-1.033-2.387-1.033c-1.806,0-3.27,1.464-3.27,3.27 c0,0.256,0.029,0.506,0.085,0.745C5.163,5.404,2.753,4.102,1.14,2.124C0.859,2.607,0.698,3.168,0.698,3.767 c0,1.134,0.577,2.135,1.455,2.722C1.616,6.472,1.112,6.325,0.671,6.08c0,0.014,0,0.027,0,0.041c0,1.584,1.127,2.906,2.623,3.206 C3.02,9.402,2.731,9.442,2.433,9.442c-0.211,0-0.416-0.021-0.615-0.059c0.416,1.299,1.624,2.245,3.055,2.271 c-1.119,0.877-2.529,1.4-4.061,1.4c-0.264,0-0.524-0.015-0.78-0.046c1.447,0.928,3.166,1.469,5.013,1.469 c6.015,0,9.304-4.983,9.304-9.304c0-0.142-0.003-0.283-0.009-0.423C14.976,4.29,15.531,3.714,15.969,3.058z"/>
+                </svg>
+              </span>
+
+              <span class="username">junior_grossi</span>
+            </a>
+          </li>
+          
+        </ul>
+      </div>
+
+      <div class="footer-col  footer-col-3">
+        <p class="text">This is my blog about web development in general. I write about PHP (Wordpress, Laravel, etc), Ruby (Rails, Jekyll), NodeJS (Socket) and more. Be welcome and let your comment :-)
+</p>
+      </div>
+    </div>
+
+  </div>
+
+</footer>
+
+
+  </body>
+
+</html>
