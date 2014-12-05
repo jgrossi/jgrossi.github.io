@@ -11,7 +11,7 @@ permalink: /about/
 <li>Graduate Web Applications Development at <a href="http://pucminas.br">PUC Minas</a> 2011-2012 </li>
 <li>MBA Business Management at <a href="http://fgv.br">FGV</a> 2007-2009 </li>
 <li>BSc. Computer Science at <a href="http://pucminas.br">PUC Minas</a> 2003-2006 </li>
-<li>ZCE Zend Certified Engineer PHP 5.3 at <a href="http://zend.com">Zend Technologies</a> 2011 </li>
+<li>ZCE (Zend Certified Engineer) PHP 5.3 at <a href="http://zend.com">Zend Technologies</a> 2011 </li>
 </ul>
 <p>Contact me at:</p>
 <ul>
