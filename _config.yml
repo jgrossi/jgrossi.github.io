@@ -1,0 +1,18 @@
+# Site settings
+title: Junior Grossi
+short_description: Entrepreneur and Web Developer
+email: juniorgro@gmail.com
+description: > # this means to ignore newlines until "baseurl:"
+    This is my blog about web development in general. I write about PHP (Wordpress, Laravel, etc), Ruby (Rails, Jekyll), NodeJS (Socket) and more. Be welcome and let your comment :-)
+baseurl: "" # the subpath of your site, e.g. /blog/
+url: "http://grossi.io" # the base hostname & protocol for your site
+permalink: /:year/:title
+comments: true
+paginate: 10
+paginate_path: "/page/:num"
+twitter_username: junior_grossi
+github_username:  jgrossi
+facebook_username: gr0ssi
+
+# Build settings
+markdown: kramdown
