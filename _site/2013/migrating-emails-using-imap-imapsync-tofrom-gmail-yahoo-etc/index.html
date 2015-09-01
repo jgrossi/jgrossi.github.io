@@ -10,19 +10,20 @@
   <meta name="description" content="I'll try use the new Yahoo! Mail for a while but I need my old emails messages. I am a Gmail user and want to copy everything to Yahoo! Mail. After search a ...">
 
   <link rel="stylesheet" href="/css/main.css">
-  <link rel="canonical" href="http://grossi.io/2013/migrating-emails-using-imap-imapsync-tofrom-gmail-yahoo-etc">
-  <link rel="alternate" type="application/atom+xml" title="Junior Grossi" href="http://grossi.io/feed.xml" />
-
+  <link rel="canonical" href="http://grossi.io//2013/migrating-emails-using-imap-imapsync-tofrom-gmail-yahoo-etc">
+  <link rel="alternate" type="application/atom+xml" title="Junior Grossi" href="http://grossi.io//feed.xml" />
+	
   <script>
-    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
 
-    ga('create', 'UA-24490124-1', 'auto');
-    ga('send', 'pageview');
+  ga('create', 'UA-24490124-1', 'auto');
+  ga('send', 'pageview');
+
   </script>
-  
+
 </head>
 
 
@@ -61,6 +62,8 @@
         
           
         
+          
+        
       </div>
     </nav>
 
@@ -75,12 +78,15 @@
 
   <header class="post-header">
     <h1 class="post-title">Migrating emails using IMAP (imapsync) to/from (Gmail, Yahoo, etc)</h1>
-    <p class="post-meta">Jan 18, 2013</p>
+    <p class="post-meta">
+      Created on Jan 18, 2013 | Last update on Apr 5, 2015
+
+    </p>
   </header>
 
   <article class="post-content">
     <p>Hi all!</p>
-<p>Last update <a href="#20140425"><strong>April 25 2014</strong></a>!</p>
+<p>Last update <a href="#20150405"><strong>April 5 2015</strong></a>!</p>
 <p>I'll try use the new Yahoo! Mail for a while but I need my old emails messages. I am a Gmail user and want to copy everything to Yahoo! Mail. After search a lot at Google I found <strong>imapsync</strong>. It is a Linux program that runs on the command line and can connect to a IMAP server and copy to another one.</p>
 <h1>Linux Machine</h1>
 <p>I am a MAC user, so I don't have Linux machines except servers I don't want to install things I'll use just once. So I created a Ubuntu 12.10 64 bits droplet at <a href="http://digitalocean.com">Digital Ocean</a> and install dependencies and start to sync my emails messages. First we must install dependencies and after install the <strong>imapsync</strong>. Take a look:</p>
@@ -175,6 +181,13 @@
 
 <p>Thanks for reading!</p>
 
+<h3 id="20150405">Update Apr 5 2015</h3>
+
+<p>Thanks for @pgf67 for the contribution. Using the last <code>imapsync</code> version (1.607) you must install some packages:</p>
+
+<p><code>sudo apt-get install libio-tee-perl libunicode-string-perl</code></p>
+
+
   </article>
 
   
@@ -209,7 +222,7 @@
     <div class="footer-col-wrapper">
       <div class="footer-col  footer-col-1">
         <p>
-          <a href="http://grossi.io">
+          <a href="http://grossi.io/">
             <img src="http://www.gravatar.com/avatar/7bb3a66a199daec275d5ad339724c754.png?s=100" alt="Junior Grossi">
           </a>
         </p>

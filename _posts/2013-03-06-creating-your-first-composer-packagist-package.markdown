@@ -9,7 +9,7 @@ author_email: juniorgro@gmail.com
 author_url: http://grossi.io
 excerpt: |+
   Today I'll write about how you can contribute with PHP community creating packages (or updating your's) using <a href=\"http://getcomposer.org\">Composer</a> and <a href=\"http://packagist.org\">Packagist</a>. First, if you're a PHP developer
-  and don't know yet what is Composer, take a look on the post <a href=\"http://juniorgrossi.com/why-you-should-use-composer-and-how-to-start-using-it/\">Why you should use Composer and how to start using it</a> to get more information about.
+  and don't know yet what is Composer, take a look on the post <a href=\"http://grossi.io/2013/why-you-should-use-composer-and-how-to-start-using-it/\">Why you should use Composer and how to start using it</a> to get more information about.
 
 wordpress_id: 590
 wordpress_url: http://juniorgrossi.com/?p=590
@@ -20,7 +20,7 @@ categories:
 - Composer
 tags: []
 ---
-<p>Hi everybody! Today I'll write about how you can contribute with PHP community creating packages (or updating your's) using <a href="http://getcomposer.org">Composer</a> and <a href="http://packagist.org">Packagist</a>. First, if you're a PHP developer and don't know yet what is Composer, take a look on the post <a href="http://juniorgrossi.com/why-you-should-use-composer-and-how-to-start-using-it/">Why you should use Composer and how to start using it</a> to get more information about.</p>
+<p>Hi everybody! Today I'll write about how you can contribute with PHP community creating packages (or updating your's) using <a href="http://getcomposer.org">Composer</a> and <a href="http://packagist.org">Packagist</a>. First, if you're a PHP developer and don't know yet what is Composer, take a look on the post <a href="http://grossi.io/2013/why-you-should-use-composer-and-how-to-start-using-it/">Why you should use Composer and how to start using it</a> to get more information about.</p>
 <h2>Using Composer</h2>
 <p>Composer is a package manager for PHP. You can <strong>use</strong> packages the community developed and you can <strong>contribute</strong> with your packages too. Here I'll show how to create a project/package, install Composer inside it and send to Packagist, where others developers can use it inside their projects. <a id="more"></a><a id="more-590"></a></p>
 <h2>Creating the Package</h2>

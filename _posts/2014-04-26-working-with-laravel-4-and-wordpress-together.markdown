@@ -2,7 +2,7 @@
 layout: post
 status: publish
 published: true
-title: Working with Laravel 4 and Wordpress together
+title: Working with Laravel 4 or 5 and Wordpress together
 excerpt: |+
   Currently I am working on a project where I had to make some choices about technologies and how work with them together. First this project will be developed using Wordpress only. It's a College Group site, where we had to work with 13 schools around the world and each one must has the control of your own content.
 
@@ -19,7 +19,12 @@ categories:
 tags: []
 ---
 <p>Hi everybody!</p>
-<p><a href="#using-wordpress-corcel">Updated May 11th 2014</a></p>
+
+<p><strong>Updated Mar 3rd 2015:</strong> <a href="#laravel5">Are you using Laravel 5? Check these changes</a>!</p>
+
+<p><strong>Updated May 11th 2014:</strong> <a href="#using-wordpress-corcel">Using Corcel project</a></p>
+
+
 <p>Currently I am working on a project where I had to make some choices about technologies and how work with them together. First this project will be developed using Wordpress only. It's a College Group site, where we had to work with 13 schools around the world and each one must has the control of your own content.</p>
 <p>This could be made with Wordpress, but I think when the site is not so small maybe you can use another CMS or Framework, because I particularly prefer to work with MVC. So because some decisions inside the company we decided to use Wordpress Admin Panel, that is a very good, use its architecture and its database. So Wordpress will be used to the application back-end, with user control, user permission, etc.</p>
 <p>To the front-end we decided to work with Laravel. To query information from the Wordpress database we've used the wordpress functions inside Laravel, so it's much better to work with a MVC Wordpress.</p>
@@ -86,6 +91,12 @@ class SchoolController extends BaseController
     }
 }
 {% endhighlight %}
+
+<h3 id="laravel5">Laravel 5 changes</h3>
+
+If you're using Laravel 5 when you create a `WP_Query` instance you should receive the error `Call to undefined function App\Http\Controllers\WP_Query()`. This is because you're inside `App\Http\Controllers` namespace, made by default by Laravel 5. Just use `new \WP_Query` (with the backslash), forcing to call the class without any namespace.
+
+...Continuing...
 
 <p>Maybe you need some Wordpress features but you have to use it from your theme's folder. If you don't know how to create a Wordpress Theme, check <a href="http://grossi.io/2012/creating-your-first-wordpress-theme-part-1/">this post</a>.</p>
 <p>For example, in my project I had to create a "About" page for each school. So I create pages with taxonomies called "SchoolName". After, I create a page with the "About" title and select the "São Paulo's School" term in my taxonomy "SchoolName". But all schools will have the same page structure, right? So I have to create a template page inside my Wordpress theme's folder. This way I can have custom fields to this page and all schools will have the About page looking like the same.</p>

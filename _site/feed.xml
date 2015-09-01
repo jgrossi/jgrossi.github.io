@@ -4,16 +4,191 @@
     <title>Junior Grossi</title>
     <description>This is my blog about web development in general. I write about PHP (Wordpress, Laravel, etc), Ruby (Rails, Jekyll), NodeJS (Socket) and more. Be welcome and let your comment :-)
 </description>
-    <link>http://grossi.io/</link>
-    <atom:link href="http://grossi.io/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Sat, 06 Dec 2014 12:11:35 -0200</pubDate>
-    <lastBuildDate>Sat, 06 Dec 2014 12:11:35 -0200</lastBuildDate>
+    <link>http://grossi.io//</link>
+    <atom:link href="http://grossi.io//feed.xml" rel="self" type="application/rss+xml"/>
+    <pubDate>Wed, 22 Apr 2015 10:02:18 -0300</pubDate>
+    <lastBuildDate>Wed, 22 Apr 2015 10:02:18 -0300</lastBuildDate>
     <generator>Jekyll v2.5.2</generator>
     
       <item>
-        <title>Working with Laravel 4 and Wordpress together</title>
+        <title>Using Ruby on Rails Ajax adapter with any project, even PHP (like Laravel)</title>
+        <description>&lt;p&gt;Hello!!!&lt;/p&gt;
+
+&lt;p&gt;Every project you have to make some requests using Ajax, right? I know that &lt;a href=&quot;http://jquery.com&quot;&gt;jQuery&lt;/a&gt; has done a very good job and almost all project you start it is present there, together with your Javascript files. So you can make Ajax calls any time, where you want, just making the call using Javascript.&lt;/p&gt;
+
+&lt;p&gt;I developed some projects using &lt;a href=&quot;http://rubyonrails.org&quot;&gt;Ruby On Rails&lt;/a&gt; some time ago, and I start to think about using AJAX in a different way. Rails uses a custom jQuery adapter to allow you to do things like that:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span class=&quot;n&quot;&gt;link_to&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&amp;quot;Destroy&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;user_path&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;vi&quot;&gt;@user&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;method&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:delete&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;remote&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;kp&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;We can think that Rails works with Ajax in a different way, but that’s not true. What the &lt;code&gt;link_to&lt;/code&gt; helper function does is to only write HTML code that the jQuery adapter understands. Calling &lt;code&gt;link_to&lt;/code&gt; function like above will produce the follow HTML code:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-html&quot; data-lang=&quot;html&quot;&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;a&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;href=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;/users/1&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;data-method=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;delete&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;data-remote=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;true&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;Destroy&lt;span class=&quot;nt&quot;&gt;&amp;lt;/a&amp;gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;That’s not magic, I know. But where’s the magic happens so? Just because you have &lt;code&gt;data-remote=&quot;true&quot;&lt;/code&gt; inside the link, this will be an Ajax call in Rails, and you can return Javascript code that will be executed without refreshing the page.&lt;/p&gt;
+
+&lt;h2 id=&quot;the-rails-jquery-adapter&quot;&gt;The Rails jQuery adapter&lt;/h2&gt;
+
+&lt;p&gt;The jQuery adapter for Rails has a separated &lt;a href=&quot;https://github.com/rails/jquery-rails&quot;&gt;repository&lt;/a&gt; on &lt;a href=&quot;http://github.com&quot;&gt;Github&lt;/a&gt;. You can think this adapter is complicated and has a lot of files. That’s not true, and the magic happens only because one file. Yes, you need just one Javascript file to make the Ajax magic inside any project, like Rails does.&lt;/p&gt;
+
+&lt;p&gt;So, what do I have to do? Easy, you have to include just one Javascript file inside your project. It does not matter if it is written in PHP, Python or Perl, you can use the Rails jQuery adapter with it, just including one single JS file.&lt;/p&gt;
+
+&lt;p&gt;The repository you can find &lt;a href=&quot;https://github.com/rails/jquery-rails&quot;&gt;here&lt;/a&gt;. The &lt;a href=&quot;https://github.com/rails/jquery-rails/blob/master/vendor/assets/javascripts/jquery_ujs.js&quot;&gt;JS file we need&lt;/a&gt; is located on the following path: &lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;https://github.com/rails/jquery-rails/blob/master/vendor/assets/javascripts/jquery_ujs.js
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;That’s the file we are looking for. Download it an just rename it to &lt;code&gt;rails.js&lt;/code&gt; or even &lt;code&gt;ajax.js&lt;/code&gt;, the name does not matter now. Now, include it inside your project, after where you’ve included jQuery:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-html&quot; data-lang=&quot;html&quot;&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;script &lt;/span&gt;&lt;span class=&quot;na&quot;&gt;type=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;text/javascript&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;src=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;assets/js/jquery.js&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&amp;lt;/script&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;script &lt;/span&gt;&lt;span class=&quot;na&quot;&gt;type=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;text/javascript&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;src=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;assets/js/rails.js&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&amp;lt;/script&amp;gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Ok! What do you have to do now? Just right the HTML code the adapter can understand. If you are working with &lt;a href=&quot;http://laravel.com&quot;&gt;Laravel&lt;/a&gt;, for example, you can do this:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-html&quot; data-lang=&quot;html&quot;&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;a&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;href=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;&amp;lt;?php echo url(&amp;#39;users/1&amp;#39;, [&amp;#39;data-method&amp;#39; =&amp;gt; &amp;#39;delete&amp;#39;, &amp;#39;date-remote&amp;#39; =&amp;gt; true]) ?&amp;gt;&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;Destroy&lt;span class=&quot;nt&quot;&gt;&amp;lt;/a&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;&amp;lt;!--&amp;lt;a href=&amp;quot;/users/1&amp;quot; data-method=&amp;quot;delete&amp;quot; data-remote=&amp;quot;true&amp;quot;&amp;gt;Destroy&amp;lt;/a&amp;gt;--&amp;gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;server-response-with-javascript-like-rails&quot;&gt;Server response with Javascript, like Rails&lt;/h3&gt;
+
+&lt;p&gt;Maybe you want to set all Ajax calls to return a Javascript code, like Rails does. By default, the jQuery Rails adapter expect (with Ajax calls) HTML code, but that’s easy to change.&lt;/p&gt;
+
+&lt;p&gt;What you have to do is to say to jQuery adapter you want to use Javascript type in your server response. So you can just include inside our &lt;code&gt;rails.js&lt;/code&gt; (or the name you gave to it) the line with &lt;code&gt;$.ajaxSettings.dataType&lt;/code&gt; like that:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-javascript&quot; data-lang=&quot;javascript&quot;&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;undefined&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+
+&lt;span class=&quot;cm&quot;&gt;/**&lt;/span&gt;
+&lt;span class=&quot;cm&quot;&gt; * Unobtrusive scripting adapter for jQuery&lt;/span&gt;
+&lt;span class=&quot;cm&quot;&gt; * https://github.com/rails/jquery-ujs&lt;/span&gt;
+&lt;span class=&quot;cm&quot;&gt; *&lt;/span&gt;
+&lt;span class=&quot;cm&quot;&gt; * Requires jQuery 1.8.0 or later.&lt;/span&gt;
+&lt;span class=&quot;cm&quot;&gt; *&lt;/span&gt;
+&lt;span class=&quot;cm&quot;&gt; * Released under the MIT license&lt;/span&gt;
+&lt;span class=&quot;cm&quot;&gt; *&lt;/span&gt;
+&lt;span class=&quot;cm&quot;&gt; */&lt;/span&gt;
+  
+  &lt;span class=&quot;c1&quot;&gt;// ADD THIS LINE&lt;/span&gt;
+  &lt;span class=&quot;nx&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;ajaxSettings&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;dataType&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;script&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+
+  &lt;span class=&quot;c1&quot;&gt;// Cut down on the number of issues from people inadvertently including jquery_ujs twice&lt;/span&gt;
+  &lt;span class=&quot;c1&quot;&gt;// by detecting and raising an error when it happens.&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;rails&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;!==&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;undefined&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;nx&quot;&gt;$&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;error&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;jquery-ujs has already been loaded!&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+  &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;This will say to the jQuery adapter it must expect Javascript code as response by default and you want to execute that. That’s amazing! But if you want some call to return a JSON response for example, just set &lt;code&gt;data-type=&quot;json&quot;&lt;/code&gt; on the link and the adapter will do the job for you. &lt;/p&gt;
+
+&lt;p&gt;– Get the changed file &lt;a href=&quot;https://gist.github.com/jgrossi/ba299b6f96383d25242b&quot;&gt;here&lt;/a&gt;!!! –&lt;/p&gt;
+
+&lt;p&gt;As you can see on the line #102 (my file), the file will look first for some &lt;code&gt;data-type&lt;/code&gt; attribute inside your HTML code, and after the &lt;code&gt;$.ajaxSettings.dataType&lt;/code&gt; we’ve set.&lt;/p&gt;
+
+&lt;p&gt;For example, using Laravel you can return a View file as a Javascript file:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-php&quot; data-lang=&quot;php&quot;&gt;&lt;span class=&quot;cp&quot;&gt;&amp;lt;?php&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;// Removing a user inside Controller&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;$user&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;User&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;find&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;$user&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;delete&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
+
+&lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;view&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;user.delete&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;compact&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;user&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;));&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Ok, that’s nothing new, but the content of the &lt;code&gt;profile&lt;/code&gt; file now can be Javascript, because our adapter is looking for that type of response:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-php&quot; data-lang=&quot;php&quot;&gt;&lt;span class=&quot;x&quot;&gt;alert(&amp;quot;The user &lt;/span&gt;&lt;span class=&quot;cp&quot;&gt;&amp;lt;?php&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$user&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;name&lt;/span&gt; &lt;span class=&quot;cp&quot;&gt;?&amp;gt;&lt;/span&gt;&lt;span class=&quot;x&quot;&gt; was removed from our site.&amp;quot;);&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;And when you click the “Destroy” link you will have an &lt;code&gt;alert&lt;/code&gt; with the message as the server response ;-)&lt;/p&gt;
+
+&lt;h3 id=&quot;others-goodies&quot;&gt;Others goodies&lt;/h3&gt;
+
+&lt;p&gt;In addition you can use some others goodies the Rails jQuery adapter has, like setting &lt;code&gt;data-method&lt;/code&gt; to work with Restful applications (get, post, delete, put), the &lt;code&gt;data-confirm&lt;/code&gt; to show the Javascript dialog asking you to confirm some question, and more, like that:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-html&quot; data-lang=&quot;html&quot;&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;a&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;href=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;http://example.com&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;data-method=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;delete&amp;quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;data-confirm=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;quot;Do you want to remove this user?&amp;quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;Destroy&lt;span class=&quot;nt&quot;&gt;&amp;lt;/a&amp;gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Thanks for reading! See you!!&lt;/p&gt;
+
+</description>
+        <pubDate>Fri, 27 Feb 2015 00:00:00 -0300</pubDate>
+        <link>http://grossi.io//2015/using-ruby-on-rails-ajax-adapter-with-any-project-even-php-like-laravel</link>
+        <guid isPermaLink="true">http://grossi.io//2015/using-ruby-on-rails-ajax-adapter-with-any-project-even-php-like-laravel</guid>
+        
+        
+        <category>ruby on rails</category>
+        
+        <category>ajax</category>
+        
+        <category>php</category>
+        
+        <category>laravel</category>
+        
+      </item>
+    
+      <item>
+        <title>Why Wordpress is your best option for creating websites</title>
         <description>&lt;p&gt;Hi everybody!&lt;/p&gt;
-&lt;p&gt;&lt;a href=&quot;#using-wordpress-corcel&quot;&gt;Updated May 11th 2014&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;Here I’m again to write my first post in 2015. Last year I’ve wrote less and this year I have plans to write much more, telling about my experience with web development. I have plans to start screencasting too, but this is just plans :D&lt;/p&gt;
+
+&lt;p&gt;I decided to start this year writing about Wordpress. Last year I thought Wordpress helped me and my company to develop websites faster with a bunch of nice features, making a better job and with less time I spent before.&lt;/p&gt;
+
+&lt;p&gt;So, today I’m starting a series about using Wordpress to create websites. First I’m going to write about why you should use Wordpress to develop your next website and after how you can do that, which plugins you can use and how to use them, one by one.&lt;/p&gt;
+
+&lt;h2 id=&quot;about-wordpress&quot;&gt;About Wordpress&lt;/h2&gt;
+
+&lt;p&gt;Wordpress is a handful CMS and you can create what you need with it. It’s not only a CMS, but THE CMS. I have experience with Joomla, Drupal and Bolt too but I think Wordpress is easier to start with and you can build some MVP’s with it too, decreasing the time you need to put a project online. If you have an idea and need to put it online fast, go with Wordpress. It can solve your problem in a very short space of time.&lt;/p&gt;
+
+&lt;p&gt;I agree that some Wordpress’s parts are developed in a very old PHP way (PHP 4 to 5.2), but that works! Listen! I’m not telling you Wordpress is the best PHP tool you have. For each project you have you must check what is the best technology to be used. For me, to make websites between 1 and 30 pages (or a little more), I think Wordpress is the best option.&lt;/p&gt;
+
+&lt;p&gt;Wordpress has some problems that all projects have, not only in the PHP world. But I’m here today to tell you why Wordpress is important to me and to my company, and why we’ve used it for years with success and mainly &lt;strong&gt;HOW&lt;/strong&gt; we did that!&lt;/p&gt;
+
+&lt;h3 id=&quot;wordpress-plugins&quot;&gt;Wordpress Plugins&lt;/h3&gt;
+
+&lt;p&gt;I think the big advantage of Wordpress is the community. Wordpress is used by 10% or more of the hole web (I really do not remember). In other words, Wordpress has a lot o developers behind it, working every day to improve security and making it better and better.&lt;/p&gt;
+
+&lt;p&gt;Furthermore with Wordpress you always will have options. If you want some plugin to customize some post, for example, you can use 1, 2, 3 or more plugins. You can try them and choose the better &lt;strong&gt;for you&lt;/strong&gt;. I remember when I was trying to customize the WP login page with my customer’s logo, and I found 8 &lt;strong&gt;good&lt;/strong&gt; plugins to do that. I choose one and made the adjusts I needed. After that I only have to use the adapted plugin to another customer, because this job was done before :-)&lt;/p&gt;
+
+&lt;h3 id=&quot;the-administration-panel&quot;&gt;The Administration Panel&lt;/h3&gt;
+
+&lt;p&gt;Wordpress has an amazing Admin Panel. This is a fact. It’s responsive, beautiful, elegant and works like a charm. Telling about customers, around 80% do not need a administration panel like Wordpress. It has much more than you need and you can do much more than you think. Another advantage of the WP Admin Panel is you always will have similar interface and functionality, and it’s easier do show your customer how his Admin Panel will work.&lt;/p&gt;
+
+&lt;p&gt;You have &lt;strong&gt;a lot&lt;/strong&gt; of plugins that works just for Admin Panel, to make it better and more customizable. You can customize menus, post types, columns and data, even text and images too (like crop for example). You have a lot of things ready to go and this can save your life and make you money, with a very good product in hands.&lt;/p&gt;
+
+&lt;h3 id=&quot;give-you-free-time&quot;&gt;Give you free time&lt;/h3&gt;
+
+&lt;p&gt;Using Wordpress to develop websites can save you time. You can have more time to do what you want, and you know you’ve made a very good job. Remember: “Time is money” :-)&lt;/p&gt;
+
+&lt;p&gt;Because Wordpress plugins you can reuse just what you need. Wordpress alone won’t make a very good website (only blog) and won’t make your customer happy, really. If you want to do an amazing job you have to search for plugins. Every time you think some feature there are 2 or more Wordpress plugins doing the job, every time! And I will give you what plugins I’ve used and how to use them on the next posts.&lt;/p&gt;
+
+&lt;p&gt;Generally the websites have some common features, so when you find a plugin to do some feature you can use it again and again, and every time you’ll need less time to finish the job, because Wordpress is doing it for you. Here I strongly encourage you to contribute with the plugins you use. Maybe you can find a bug and fix it in your project, but is better to submit to the author’s plugin and help the community. Remember, you are using a open source project, so you can help others like you too.&lt;/p&gt;
+
+&lt;h3 id=&quot;its-easy&quot;&gt;It’s EASY!!!&lt;/h3&gt;
+
+&lt;p&gt;The final point here is: Wordpress is easy. You can install it and start to code as fast you think. You can create a website using the layout you want, with the components you want, with everything you want. But pay attention, because Wordpress is easy you have to think before write. Because Wordpress is easy to learn you can find developers starting to develop the wrong way and with bad practices.&lt;/p&gt;
+
+&lt;p&gt;Before start with Wordpress &lt;strong&gt;you have to learn PHP&lt;/strong&gt;. To make Wordpress your friend you have to be good with PHP and you have to know how things work, what force you to read the documentation and ask you every time if that is the best option to do that you’re doing.&lt;/p&gt;
+
+&lt;p&gt;Some people think wrong when working with Wordpress. You can use WP with &lt;a href=&quot;http://getcomposer.org&quot;&gt;composer&lt;/a&gt; for example, using a Zend Framework library, or the Laravel ORM, or some API, or what you need. I’ll cover that on the next posts too. Remember, everything is PHP, so enjoy the language!&lt;/p&gt;
+
+&lt;p&gt;Next posts I’ll write about &lt;strong&gt;how&lt;/strong&gt; you can create amazing websites with Wordpress and what plugins you can use to make your life easier. Be in touch!&lt;/p&gt;
+
+&lt;p&gt;See you!!&lt;/p&gt;
+
+</description>
+        <pubDate>Tue, 13 Jan 2015 00:00:00 -0200</pubDate>
+        <link>http://grossi.io//2015/why-wordpress-is-your-best-option-for-creating-websites</link>
+        <guid isPermaLink="true">http://grossi.io//2015/why-wordpress-is-your-best-option-for-creating-websites</guid>
+        
+        
+        <category>php</category>
+        
+        <category>wordpress</category>
+        
+      </item>
+    
+      <item>
+        <title>Working with Laravel 4 or 5 and Wordpress together</title>
+        <description>&lt;p&gt;Hi everybody!&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Updated Mar 3rd 2015:&lt;/strong&gt; &lt;a href=&quot;#laravel5&quot;&gt;Are you using Laravel 5? Check these changes&lt;/a&gt;!&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Updated May 11th 2014:&lt;/strong&gt; &lt;a href=&quot;#using-wordpress-corcel&quot;&gt;Using Corcel project&lt;/a&gt;&lt;/p&gt;
+
 &lt;p&gt;Currently I am working on a project where I had to make some choices about technologies and how work with them together. First this project will be developed using Wordpress only. It&#39;s a College Group site, where we had to work with 13 schools around the world and each one must has the control of your own content.&lt;/p&gt;
 &lt;p&gt;This could be made with Wordpress, but I think when the site is not so small maybe you can use another CMS or Framework, because I particularly prefer to work with MVC. So because some decisions inside the company we decided to use Wordpress Admin Panel, that is a very good, use its architecture and its database. So Wordpress will be used to the application back-end, with user control, user permission, etc.&lt;/p&gt;
 &lt;p&gt;To the front-end we decided to work with Laravel. To query information from the Wordpress database we&#39;ve used the wordpress functions inside Laravel, so it&#39;s much better to work with a MVC Wordpress.&lt;/p&gt;
@@ -72,6 +247,12 @@
         &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;View&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;::&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;make&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;school.index&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;with&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;schools&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$posts&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
     &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
 &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;laravel5&quot;&gt;Laravel 5 changes&lt;/h3&gt;
+
+&lt;p&gt;If you’re using Laravel 5 when you create a &lt;code&gt;WP_Query&lt;/code&gt; instance you should receive the error &lt;code&gt;Call to undefined function App\Http\Controllers\WP_Query()&lt;/code&gt;. This is because you’re inside &lt;code&gt;App\Http\Controllers&lt;/code&gt; namespace, made by default by Laravel 5. Just use &lt;code&gt;new \WP_Query&lt;/code&gt; (with the backslash), forcing to call the class without any namespace.&lt;/p&gt;
+
+&lt;p&gt;…Continuing…&lt;/p&gt;
 
 &lt;p&gt;Maybe you need some Wordpress features but you have to use it from your theme&#39;s folder. If you don&#39;t know how to create a Wordpress Theme, check &lt;a href=&quot;http://grossi.io/2012/creating-your-first-wordpress-theme-part-1/&quot;&gt;this post&lt;/a&gt;.&lt;/p&gt;
 &lt;p&gt;For example, in my project I had to create a &quot;About&quot; page for each school. So I create pages with taxonomies called &quot;SchoolName&quot;. After, I create a page with the &quot;About&quot; title and select the &quot;São Paulo&#39;s School&quot; term in my taxonomy &quot;SchoolName&quot;. But all schools will have the same page structure, right? So I have to create a template page inside my Wordpress theme&#39;s folder. This way I can have custom fields to this page and all schools will have the About page looking like the same.&lt;/p&gt;
@@ -157,8 +338,8 @@
 &lt;p&gt;Thank you for reading.&lt;/p&gt;
 </description>
         <pubDate>Sat, 26 Apr 2014 19:53:02 -0300</pubDate>
-        <link>http://grossi.io/2014/working-with-laravel-4-and-wordpress-together</link>
-        <guid isPermaLink="true">http://grossi.io/2014/working-with-laravel-4-and-wordpress-together</guid>
+        <link>http://grossi.io//2014/working-with-laravel-4-and-wordpress-together</link>
+        <guid isPermaLink="true">http://grossi.io//2014/working-with-laravel-4-and-wordpress-together</guid>
         
         
         <category>php</category>
@@ -210,8 +391,8 @@
 &lt;p&gt;Be happy!&lt;/p&gt;
 </description>
         <pubDate>Wed, 06 Nov 2013 13:38:10 -0200</pubDate>
-        <link>http://grossi.io/2013/generating-ids-like-youtube-or-bit-ly-using-php</link>
-        <guid isPermaLink="true">http://grossi.io/2013/generating-ids-like-youtube-or-bit-ly-using-php</guid>
+        <link>http://grossi.io//2013/generating-ids-like-youtube-or-bit-ly-using-php</link>
+        <guid isPermaLink="true">http://grossi.io//2013/generating-ids-like-youtube-or-bit-ly-using-php</guid>
         
         
         <category>php</category>
@@ -327,8 +508,8 @@
 &lt;p&gt;Now you will have all files you specified inside the MANIFEST file minified and being managed by the package. Now, you can do the same for CSS files. The package has more options like cache, etc. You can check the package&#39;s configuration file and found more details there. Be happy!&lt;/p&gt;
 </description>
         <pubDate>Mon, 04 Nov 2013 16:52:52 -0200</pubDate>
-        <link>http://grossi.io/2013/managing-assets-with-laravel-4</link>
-        <guid isPermaLink="true">http://grossi.io/2013/managing-assets-with-laravel-4</guid>
+        <link>http://grossi.io//2013/managing-assets-with-laravel-4</link>
+        <guid isPermaLink="true">http://grossi.io//2013/managing-assets-with-laravel-4</guid>
         
         
         <category>php</category>
@@ -363,8 +544,8 @@
 &lt;p&gt;Laravel 4 does the rest for you. Now everything will work and you won&#39;t have problem with routes. Continue to develop your app!&lt;/p&gt;
 </description>
         <pubDate>Sun, 13 Oct 2013 23:57:45 -0300</pubDate>
-        <link>http://grossi.io/2013/working-with-php-5-4-built-in-server-with-laravel-4</link>
-        <guid isPermaLink="true">http://grossi.io/2013/working-with-php-5-4-built-in-server-with-laravel-4</guid>
+        <link>http://grossi.io//2013/working-with-php-5-4-built-in-server-with-laravel-4</link>
+        <guid isPermaLink="true">http://grossi.io//2013/working-with-php-5-4-built-in-server-with-laravel-4</guid>
         
         
         <category>php</category>
@@ -433,8 +614,8 @@
 &lt;/ul&gt;
 </description>
         <pubDate>Wed, 25 Sep 2013 19:55:24 -0300</pubDate>
-        <link>http://grossi.io/2013/be-a-better-php-developer</link>
-        <guid isPermaLink="true">http://grossi.io/2013/be-a-better-php-developer</guid>
+        <link>http://grossi.io//2013/be-a-better-php-developer</link>
+        <guid isPermaLink="true">http://grossi.io//2013/be-a-better-php-developer</guid>
         
         
         <category>php</category>
@@ -453,8 +634,8 @@
 &lt;p&gt;Best regards. Be happy.&lt;/p&gt;
 </description>
         <pubDate>Wed, 18 Sep 2013 16:56:39 -0300</pubDate>
-        <link>http://grossi.io/2013/solve-the-problem-just-it</link>
-        <guid isPermaLink="true">http://grossi.io/2013/solve-the-problem-just-it</guid>
+        <link>http://grossi.io//2013/solve-the-problem-just-it</link>
+        <guid isPermaLink="true">http://grossi.io//2013/solve-the-problem-just-it</guid>
         
         
         <category>php</category>
@@ -632,8 +813,8 @@
 &lt;p&gt;Thanks for reading!&lt;/p&gt;
 </description>
         <pubDate>Mon, 24 Jun 2013 03:08:29 -0300</pubDate>
-        <link>http://grossi.io/2013/design-patterns-with-php-adapters</link>
-        <guid isPermaLink="true">http://grossi.io/2013/design-patterns-with-php-adapters</guid>
+        <link>http://grossi.io//2013/design-patterns-with-php-adapters</link>
+        <guid isPermaLink="true">http://grossi.io//2013/design-patterns-with-php-adapters</guid>
         
         
         <category>php</category>
@@ -680,92 +861,13 @@
 &lt;p&gt;When you want, just commit, push your package to GitHub and share!&lt;/p&gt;
 </description>
         <pubDate>Fri, 21 Jun 2013 15:15:19 -0300</pubDate>
-        <link>http://grossi.io/2013/testing-your-packagistcomposer-package-locally</link>
-        <guid isPermaLink="true">http://grossi.io/2013/testing-your-packagistcomposer-package-locally</guid>
+        <link>http://grossi.io//2013/testing-your-packagistcomposer-package-locally</link>
+        <guid isPermaLink="true">http://grossi.io//2013/testing-your-packagistcomposer-package-locally</guid>
         
         
         <category>php</category>
         
         <category>composer</category>
-        
-      </item>
-    
-      <item>
-        <title>Contributing with the PHP community</title>
-        <description>&lt;p&gt;Hi guys!&lt;/p&gt;
-&lt;p&gt;Everyone wants to contribute in some way with developers. Maybe you&#39;re thinking in a project to develop and share but you search at Google and find someone who already did that.&lt;/p&gt;
-&lt;p&gt;Maybe the answer to this problem is in front of you. Everything you do can be reused in a future project. If you&#39;re working in a project in the company you works, I&#39;m sure you have some piece of code that you had to thought to develop it. So you can contribute.&lt;/p&gt;
-&lt;p&gt;I am now developing the Wordpress Corcel, that is a small set of classes that works in a Wordpress database, retrieving data and working with them. It uses the Eloquent ORM, developed for the Laravel Framework.&lt;/p&gt;
-&lt;p&gt;This project is the result of a project we&#39;re developing inside my advertising company. We had to integrate some libraries and databases with a Wordpress installation but Wordpress was too closed to do that, so we started to work in some classes that with Composer we&#39;ll can use in that project, using Slim Framework or another framework that uses Composer too.&lt;/p&gt;
-&lt;p&gt;&lt;a id=&quot;more&quot;&gt;&lt;/a&gt;&lt;a id=&quot;more-621&quot;&gt;&lt;/a&gt;&lt;/p&gt;
-&lt;p&gt;That&#39;s the idea! Maybe that set of classes won&#39;t be good for anyone, but maybe it can be useful for one or two developers, and it&#39;s the best. Only that justifies everything.&lt;/p&gt;
-&lt;p&gt;You can invent something to share and maybe it will be good enough for others. But the best open source tools we&#39;re using today was extracted from private projects in private companies. Take the Ruby on Rails example. Hanson extracted it developing the 37signals&#39;s product Basecamp. Taylor Otwell extracted Laravel from a private project at Userscape, company he works. Maybe you can contribute with simple things, that you only have to extract and share, just that.&lt;/p&gt;
-&lt;h2&gt;Be a better developer&lt;/h2&gt;
-&lt;p&gt;I started to write this post with a objetive but now I have another one. I am doing my best to improve my knowledges, reading more, writing more, developing more, talking more, contributing more, etc. And I have to say the best way to share is knowing more, is developing better.&lt;/p&gt;
-&lt;p&gt;I am always studying about Design Patters more and more. You can write a entire project using Laravel or Zend, and it can be a very good one, without errors, tested and more. But if you developed everything inside the framework you can&#39;t extract it and share. And if you want to do that you have to develop better, you have to use Design Patterns.&lt;/p&gt;
-&lt;p&gt;This way, every time you start a new project, start another one! One will be your project, using Laravel or Zend, and another a small package with useful classes that you can reuse and share later. Pay attention to use some Design Patterns and do your best to be a better developer. After that, you will have a package to share, and it can be interesting for one or two developers, maybe more and more. That&#39;s good.&lt;/p&gt;
-&lt;p&gt;If you don&#39;t have enough experience using patterns you can try. Maybe you are reading about &quot;Adapters&quot; and you can apply it inside your current project. This way you can write more and practice what you are learning. And you will be a better developer, I&#39;m sure!&lt;/p&gt;
-&lt;p&gt;I think that&#39;s the message I want to give you. You can do that better and everyone wins. If you are learning english the best way to improve it is writing, talking and missing (like me :D). And if you want to be a better developer you have to code, but code the right way, and share.&lt;/p&gt;
-</description>
-        <pubDate>Fri, 21 Jun 2013 14:55:15 -0300</pubDate>
-        <link>http://grossi.io/2013/contributing-with-the-php-community</link>
-        <guid isPermaLink="true">http://grossi.io/2013/contributing-with-the-php-community</guid>
-        
-        
-        <category>php</category>
-        
-      </item>
-    
-      <item>
-        <title>Installing ssh-copy-id on MAC and connect through SSH without password</title>
-        <description>&lt;h2&gt;Update September, 1st 2014&lt;/h2&gt;
-&lt;p&gt;The newer versions of port does not include the &lt;code&gt;ssh-copy-id&lt;/code&gt; package anymore, but you can still use it cloning this repo from Github: &lt;a href=&quot;https://github.com/beautifulcode/ssh-copy-id-for-OSX&quot;&gt;https://github.com/beautifulcode/ssh-copy-id-for-OSX&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;Hello everybody! I have some servers and always I have to login using SSH, but some passwords is very complex. So, you must copy your public key to the desired server and be happy.&lt;/p&gt;
-&lt;h2&gt;Installing the command ssh-copy-id&lt;/h2&gt;
-&lt;p&gt;I used to use &lt;strong&gt;mac ports&lt;/strong&gt; to install packages on my Mac, so: sudo port install ssh-copy-id Now you have the command installed on &lt;em&gt;/opt/local/bin/ssh-copy-id&lt;/em&gt;. Just create a symbolic link to that: sudo ln -s /opt/local/bin/ssh-copy-id /usr/bin/ssh-copy-id&lt;/p&gt;
-&lt;p&gt;&lt;a id=&quot;more&quot;&gt;&lt;/a&gt;&lt;a id=&quot;more-607&quot;&gt;&lt;/a&gt;&lt;/p&gt;
-&lt;h2&gt;Copying your public key to server&lt;/h2&gt;
-&lt;p&gt;Now you only have to run the command and be happy! The server will ask for password, and this will be the last time you type the code!&lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-php&quot; data-lang=&quot;php&quot;&gt;&lt;span class=&quot;nx&quot;&gt;ssh&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;copy&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;id&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;~/.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;ssh&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;id_rsa&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;pub&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;username&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;@&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;example&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;com&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;This&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;way&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;you&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;&amp;#39;&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;ll&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;registering&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;your&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;key&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;the&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;username&amp;quot;&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;user&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;at&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;example.com&amp;quot;&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;server&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-
-&lt;h2&gt;Alternative way&lt;/h2&gt;
-&lt;p&gt;You can too copy your &lt;em&gt;id_rsa.pub&lt;/em&gt; file content, login inside the server and append the file content to &lt;em&gt;/home/username/.ssh/authorized_keys&lt;/em&gt;. The effect will be the same, but I think using &lt;em&gt;ssh-copy-id&lt;/em&gt; is easier and quickly. Now when you try to login to server using ssh, like &lt;em&gt;ssh username@example.com&lt;/em&gt; you&#39;ll have direct access! Thank you!&lt;/p&gt;
-&lt;h1&gt;Update Oct 9 2013&lt;/h1&gt;
-&lt;p&gt;An easy way to do that, without install nothing:&lt;/p&gt;
-&lt;h2&gt;Check if id_rsa.pub exists&lt;/h2&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-php&quot; data-lang=&quot;php&quot;&gt;&lt;span class=&quot;nx&quot;&gt;cd&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;~/.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;ssh&lt;/span&gt;
-&lt;span class=&quot;nx&quot;&gt;ls&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-
-&lt;p&gt;If you found &lt;strong&gt;id_rsa.pub&lt;/strong&gt; go to the next topic. If not do the following to create one public key:&lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-php&quot; data-lang=&quot;php&quot;&gt;&lt;span class=&quot;nx&quot;&gt;cd&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;~/.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;ssh&lt;/span&gt; 
-&lt;span class=&quot;nx&quot;&gt;ssh&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;keygen&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;t&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;rsa&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;C&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;your_email@example.com&amp;quot;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-
-&lt;ul&gt;
-&lt;li&gt;Creates a new ssh key, using the provided email as a label &lt;/li&gt;
-&lt;li&gt;Generating public/private rsa key pair. &lt;/li&gt;
-&lt;li&gt;Enter file in which to save the key (/Users/you/.ssh/id_rsa): [Press enter]&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;After that:&lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-php&quot; data-lang=&quot;php&quot;&gt;&lt;span class=&quot;nx&quot;&gt;ssh&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;add&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;id_rsa&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-
-&lt;h2&gt;Copying your public key to remote server&lt;/h2&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-php&quot; data-lang=&quot;php&quot;&gt;&lt;span class=&quot;nx&quot;&gt;cat&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;~/.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;ssh&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;id_rsa&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;pub&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;ssh&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;user&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;@&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;example&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;org&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;cat &amp;gt;&amp;gt; /home/user/.ssh/authorized_keys&amp;#39;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-
-&lt;p&gt;Done!&lt;/p&gt;
-</description>
-        <pubDate>Wed, 17 Apr 2013 18:31:44 -0300</pubDate>
-        <link>http://grossi.io/2013/installing-ssh-copy-id-on-mac-and-connect-through-ssh-without-password</link>
-        <guid isPermaLink="true">http://grossi.io/2013/installing-ssh-copy-id-on-mac-and-connect-through-ssh-without-password</guid>
-        
-        
-        <category>mac osx</category>
         
       </item>
     

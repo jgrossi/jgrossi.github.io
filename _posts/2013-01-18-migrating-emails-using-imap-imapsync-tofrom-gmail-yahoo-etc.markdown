@@ -21,7 +21,7 @@ categories:
 tags: []
 ---
 <p>Hi all!</p>
-<p>Last update <a href="#20140425"><strong>April 25 2014</strong></a>!</p>
+<p>Last update <a href="#20150405"><strong>April 5 2015</strong></a>!</p>
 <p>I'll try use the new Yahoo! Mail for a while but I need my old emails messages. I am a Gmail user and want to copy everything to Yahoo! Mail. After search a lot at Google I found <strong>imapsync</strong>. It is a Linux program that runs on the command line and can connect to a IMAP server and copy to another one.</p>
 <h1>Linux Machine</h1>
 <p>I am a MAC user, so I don't have Linux machines except servers I don't want to install things I'll use just once. So I created a Ubuntu 12.10 64 bits droplet at <a href="http://digitalocean.com">Digital Ocean</a> and install dependencies and start to sync my emails messages. First we must install dependencies and after install the <strong>imapsync</strong>. Take a look:</p>
@@ -147,3 +147,11 @@ make install
 {% endhighlight %}
 
 <p>Thanks for reading!</p>
+
+<h3 id="20150405">Update Apr 5 2015</h3>
+
+Thanks for @pgf67 for the contribution. Using the last `imapsync` version (1.607) you must install some packages:
+
+`sudo apt-get install libio-tee-perl libunicode-string-perl`
+
+

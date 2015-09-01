@@ -6,23 +6,24 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width initial-scale=1">
 
-  <title>Working with Laravel 4 and Wordpress together | Junior Grossi</title>
+  <title>Working with Laravel 4 or 5 and Wordpress together | Junior Grossi</title>
   <meta name="description" content="Currently I am working on a project where I had to make some choices about technologies and how work with them together. First this project will be developed...">
 
   <link rel="stylesheet" href="/css/main.css">
-  <link rel="canonical" href="http://grossi.io/2014/working-with-laravel-4-and-wordpress-together">
-  <link rel="alternate" type="application/atom+xml" title="Junior Grossi" href="http://grossi.io/feed.xml" />
-
+  <link rel="canonical" href="http://grossi.io//2014/working-with-laravel-4-and-wordpress-together">
+  <link rel="alternate" type="application/atom+xml" title="Junior Grossi" href="http://grossi.io//feed.xml" />
+	
   <script>
-    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
 
-    ga('create', 'UA-24490124-1', 'auto');
-    ga('send', 'pageview');
+  ga('create', 'UA-24490124-1', 'auto');
+  ga('send', 'pageview');
+
   </script>
-  
+
 </head>
 
 
@@ -61,6 +62,8 @@
         
           
         
+          
+        
       </div>
     </nav>
 
@@ -74,13 +77,20 @@
         <div class="post">
 
   <header class="post-header">
-    <h1 class="post-title">Working with Laravel 4 and Wordpress together</h1>
-    <p class="post-meta">Apr 26, 2014</p>
+    <h1 class="post-title">Working with Laravel 4 or 5 and Wordpress together</h1>
+    <p class="post-meta">
+      Created on Apr 26, 2014 | Last update on Mar 3, 2015
+
+    </p>
   </header>
 
   <article class="post-content">
     <p>Hi everybody!</p>
-<p><a href="#using-wordpress-corcel">Updated May 11th 2014</a></p>
+
+<p><strong>Updated Mar 3rd 2015:</strong> <a href="#laravel5">Are you using Laravel 5? Check these changes</a>!</p>
+
+<p><strong>Updated May 11th 2014:</strong> <a href="#using-wordpress-corcel">Using Corcel project</a></p>
+
 <p>Currently I am working on a project where I had to make some choices about technologies and how work with them together. First this project will be developed using Wordpress only. It's a College Group site, where we had to work with 13 schools around the world and each one must has the control of your own content.</p>
 <p>This could be made with Wordpress, but I think when the site is not so small maybe you can use another CMS or Framework, because I particularly prefer to work with MVC. So because some decisions inside the company we decided to use Wordpress Admin Panel, that is a very good, use its architecture and its database. So Wordpress will be used to the application back-end, with user control, user permission, etc.</p>
 <p>To the front-end we decided to work with Laravel. To query information from the Wordpress database we've used the wordpress functions inside Laravel, so it's much better to work with a MVC Wordpress.</p>
@@ -139,6 +149,12 @@
         <span class="k">return</span> <span class="nx">View</span><span class="o">::</span><span class="na">make</span><span class="p">(</span><span class="s1">&#39;school.index&#39;</span><span class="p">)</span><span class="o">-&gt;</span><span class="na">with</span><span class="p">(</span><span class="s1">&#39;schools&#39;</span><span class="p">,</span> <span class="nv">$posts</span><span class="p">);</span>
     <span class="p">}</span>
 <span class="p">}</span></code></pre></div>
+
+<h3 id="laravel5">Laravel 5 changes</h3>
+
+<p>If you’re using Laravel 5 when you create a <code>WP_Query</code> instance you should receive the error <code>Call to undefined function App\Http\Controllers\WP_Query()</code>. This is because you’re inside <code>App\Http\Controllers</code> namespace, made by default by Laravel 5. Just use <code>new \WP_Query</code> (with the backslash), forcing to call the class without any namespace.</p>
+
+<p>…Continuing…</p>
 
 <p>Maybe you need some Wordpress features but you have to use it from your theme's folder. If you don't know how to create a Wordpress Theme, check <a href="http://grossi.io/2012/creating-your-first-wordpress-theme-part-1/">this post</a>.</p>
 <p>For example, in my project I had to create a "About" page for each school. So I create pages with taxonomies called "SchoolName". After, I create a page with the "About" title and select the "São Paulo's School" term in my taxonomy "SchoolName". But all schools will have the same page structure, right? So I have to create a template page inside my Wordpress theme's folder. This way I can have custom fields to this page and all schools will have the About page looking like the same.</p>
@@ -257,7 +273,7 @@
     <div class="footer-col-wrapper">
       <div class="footer-col  footer-col-1">
         <p>
-          <a href="http://grossi.io">
+          <a href="http://grossi.io/">
             <img src="http://www.gravatar.com/avatar/7bb3a66a199daec275d5ad339724c754.png?s=100" alt="Junior Grossi">
           </a>
         </p>

@@ -67,10 +67,10 @@ h1, h2, h3, h4, h5, h6 {
  * Links
  */
 a {
-  color: #2a7ae2;
+  color: #333333;
   text-decoration: none; }
   a:visited {
-    color: #1756a9; }
+    color: #0d0d0d; }
   a:hover {
     color: #111;
     text-decoration: underline; }
@@ -149,9 +149,9 @@ pre {
  * Site header
  */
 .site-header {
-  border-top: 5px solid #424242;
   border-bottom: 1px solid #e8e8e8;
   min-height: 56px;
+  background: #f5f5f5;
   position: relative; }
 
 .site-title {
@@ -311,6 +311,8 @@ pre {
     @media screen and (max-width: 800px) {
       .post-content h4 {
         font-size: 18px; } }
+  .post-content a {
+    text-decoration: underline; }
 
 /**
  * Syntax highlighting styles
