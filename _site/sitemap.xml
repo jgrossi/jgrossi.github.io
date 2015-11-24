@@ -1,179 +1,179 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>http://grossi.io//2015/using-ruby-on-rails-ajax-adapter-with-any-project-even-php-like-laravel</loc>
-    <lastmod>2015-02-27T17:58:07-03:00</lastmod>
+    <loc>http://blog.jgrossi.com//2015/using-ruby-on-rails-ajax-adapter-with-any-project-even-php-like-laravel</loc>
+    <lastmod>2015-09-01T10:37:16-03:00</lastmod>
   </url>
   <url>
-    <loc>http://grossi.io//2015/why-wordpress-is-your-best-option-for-creating-websites</loc>
-    <lastmod>2015-02-13T10:45:45-02:00</lastmod>
+    <loc>http://blog.jgrossi.com//2015/why-wordpress-is-your-best-option-for-creating-websites</loc>
+    <lastmod>2015-09-01T10:37:16-03:00</lastmod>
   </url>
   <url>
-    <loc>http://grossi.io//2014/working-with-laravel-4-and-wordpress-together</loc>
-    <lastmod>2015-03-03T22:01:53-03:00</lastmod>
+    <loc>http://blog.jgrossi.com//2014/working-with-laravel-4-and-wordpress-together</loc>
+    <lastmod>2015-09-01T10:37:16-03:00</lastmod>
   </url>
   <url>
-    <loc>http://grossi.io//2013/generating-ids-like-youtube-or-bit-ly-using-php</loc>
-    <lastmod>2014-12-04T14:36:44-02:00</lastmod>
+    <loc>http://blog.jgrossi.com//2013/generating-ids-like-youtube-or-bit-ly-using-php</loc>
+    <lastmod>2014-12-05T14:50:02-02:00</lastmod>
   </url>
   <url>
-    <loc>http://grossi.io//2013/managing-assets-with-laravel-4</loc>
-    <lastmod>2014-12-04T14:37:10-02:00</lastmod>
+    <loc>http://blog.jgrossi.com//2013/managing-assets-with-laravel-4</loc>
+    <lastmod>2014-12-05T14:50:02-02:00</lastmod>
   </url>
   <url>
-    <loc>http://grossi.io//2013/working-with-php-5-4-built-in-server-with-laravel-4</loc>
-    <lastmod>2014-12-04T14:02:15-02:00</lastmod>
+    <loc>http://blog.jgrossi.com//2013/working-with-php-5-4-built-in-server-with-laravel-4</loc>
+    <lastmod>2014-12-05T14:50:02-02:00</lastmod>
   </url>
   <url>
-    <loc>http://grossi.io//2013/be-a-better-php-developer</loc>
-    <lastmod>2014-12-04T14:37:18-02:00</lastmod>
+    <loc>http://blog.jgrossi.com//2013/be-a-better-php-developer</loc>
+    <lastmod>2014-12-05T14:50:02-02:00</lastmod>
   </url>
   <url>
-    <loc>http://grossi.io//2013/solve-the-problem-just-it</loc>
-    <lastmod>2014-12-04T14:03:09-02:00</lastmod>
+    <loc>http://blog.jgrossi.com//2013/solve-the-problem-just-it</loc>
+    <lastmod>2014-12-05T14:50:02-02:00</lastmod>
   </url>
   <url>
-    <loc>http://grossi.io//2013/design-patterns-with-php-adapters</loc>
-    <lastmod>2014-12-04T14:03:38-02:00</lastmod>
+    <loc>http://blog.jgrossi.com//2013/design-patterns-with-php-adapters</loc>
+    <lastmod>2014-12-05T14:50:02-02:00</lastmod>
   </url>
   <url>
-    <loc>http://grossi.io//2013/testing-your-packagistcomposer-package-locally</loc>
-    <lastmod>2014-12-04T14:04:00-02:00</lastmod>
+    <loc>http://blog.jgrossi.com//2013/testing-your-packagistcomposer-package-locally</loc>
+    <lastmod>2014-12-05T14:50:02-02:00</lastmod>
   </url>
   <url>
-    <loc>http://grossi.io//2013/contributing-with-the-php-community</loc>
-    <lastmod>2014-12-04T14:04:13-02:00</lastmod>
+    <loc>http://blog.jgrossi.com//2013/contributing-with-the-php-community</loc>
+    <lastmod>2014-12-05T14:50:02-02:00</lastmod>
   </url>
   <url>
-    <loc>http://grossi.io//2013/installing-ssh-copy-id-on-mac-and-connect-through-ssh-without-password</loc>
-    <lastmod>2014-12-04T14:48:47-02:00</lastmod>
+    <loc>http://blog.jgrossi.com//2013/installing-ssh-copy-id-on-mac-and-connect-through-ssh-without-password</loc>
+    <lastmod>2014-12-05T14:50:02-02:00</lastmod>
   </url>
   <url>
-    <loc>http://grossi.io//2013/creating-your-first-composer-packagist-package</loc>
-    <lastmod>2015-04-22T10:02:10-03:00</lastmod>
+    <loc>http://blog.jgrossi.com//2013/creating-your-first-composer-packagist-package</loc>
+    <lastmod>2015-09-01T10:37:16-03:00</lastmod>
   </url>
   <url>
-    <loc>http://grossi.io//2013/why-you-should-use-composer-and-how-to-start-using-it</loc>
-    <lastmod>2014-12-04T14:05:57-02:00</lastmod>
+    <loc>http://blog.jgrossi.com//2013/why-you-should-use-composer-and-how-to-start-using-it</loc>
+    <lastmod>2014-12-05T14:50:02-02:00</lastmod>
   </url>
   <url>
-    <loc>http://grossi.io//2013/working-with-multiple-php-versions-on-mac-os-x</loc>
-    <lastmod>2014-12-04T14:06:07-02:00</lastmod>
+    <loc>http://blog.jgrossi.com//2013/working-with-multiple-php-versions-on-mac-os-x</loc>
+    <lastmod>2014-12-05T14:50:02-02:00</lastmod>
   </url>
   <url>
-    <loc>http://grossi.io//2013/why-you-should-use-a-php-framework-and-why-im-using-laravel</loc>
-    <lastmod>2014-12-04T14:06:20-02:00</lastmod>
+    <loc>http://blog.jgrossi.com//2013/why-you-should-use-a-php-framework-and-why-im-using-laravel</loc>
+    <lastmod>2014-12-05T14:50:02-02:00</lastmod>
   </url>
   <url>
-    <loc>http://grossi.io//2013/migrating-emails-using-imap-imapsync-tofrom-gmail-yahoo-etc</loc>
-    <lastmod>2015-04-05T22:47:09-03:00</lastmod>
+    <loc>http://blog.jgrossi.com//2013/migrating-emails-using-imap-imapsync-tofrom-gmail-yahoo-etc</loc>
+    <lastmod>2015-09-01T10:37:16-03:00</lastmod>
   </url>
   <url>
-    <loc>http://grossi.io//2012/deployingupload-applications-using-git-forget-ftp</loc>
-    <lastmod>2014-12-04T14:06:47-02:00</lastmod>
+    <loc>http://blog.jgrossi.com//2012/deployingupload-applications-using-git-forget-ftp</loc>
+    <lastmod>2014-12-05T14:50:02-02:00</lastmod>
   </url>
   <url>
-    <loc>http://grossi.io//2012/deploying-laravel-applications-on-a-shared-host</loc>
-    <lastmod>2014-12-04T14:07:10-02:00</lastmod>
+    <loc>http://blog.jgrossi.com//2012/deploying-laravel-applications-on-a-shared-host</loc>
+    <lastmod>2014-12-05T14:50:02-02:00</lastmod>
   </url>
   <url>
-    <loc>http://grossi.io//2012/creating-your-first-wordpress-theme-part-3-important-files</loc>
-    <lastmod>2014-12-04T14:07:49-02:00</lastmod>
+    <loc>http://blog.jgrossi.com//2012/creating-your-first-wordpress-theme-part-3-important-files</loc>
+    <lastmod>2014-12-05T14:50:02-02:00</lastmod>
   </url>
   <url>
-    <loc>http://grossi.io//2012/creating-your-first-wordpress-theme-part-2</loc>
-    <lastmod>2014-12-04T14:48:49-02:00</lastmod>
+    <loc>http://blog.jgrossi.com//2012/creating-your-first-wordpress-theme-part-2</loc>
+    <lastmod>2014-12-05T14:50:02-02:00</lastmod>
   </url>
   <url>
-    <loc>http://grossi.io//2012/creating-your-first-wordpress-theme-part-1</loc>
-    <lastmod>2014-12-04T14:09:33-02:00</lastmod>
+    <loc>http://blog.jgrossi.com//2012/creating-your-first-wordpress-theme-part-1</loc>
+    <lastmod>2014-12-05T14:50:02-02:00</lastmod>
   </url>
   <url>
-    <loc>http://grossi.io//2012/thinking-the-wordpress-way-first-steps</loc>
-    <lastmod>2014-12-04T14:48:51-02:00</lastmod>
+    <loc>http://blog.jgrossi.com//2012/thinking-the-wordpress-way-first-steps</loc>
+    <lastmod>2014-12-05T14:50:02-02:00</lastmod>
   </url>
   <url>
-    <loc>http://grossi.io//2012/getting-an-free-akismet-api-key-for-your-personal-site</loc>
-    <lastmod>2014-12-04T14:09:19-02:00</lastmod>
+    <loc>http://blog.jgrossi.com//2012/getting-an-free-akismet-api-key-for-your-personal-site</loc>
+    <lastmod>2014-12-05T14:50:02-02:00</lastmod>
   </url>
   <url>
-    <loc>http://grossi.io//2012/my-blogs-new-theme</loc>
-    <lastmod>2014-12-04T14:08:43-02:00</lastmod>
+    <loc>http://blog.jgrossi.com//2012/my-blogs-new-theme</loc>
+    <lastmod>2014-12-05T14:50:02-02:00</lastmod>
   </url>
   <url>
-    <loc>http://grossi.io//2012/mysocial-my-social-network-developed-for-academic-purpose</loc>
-    <lastmod>2014-12-04T14:10:59-02:00</lastmod>
+    <loc>http://blog.jgrossi.com//2012/mysocial-my-social-network-developed-for-academic-purpose</loc>
+    <lastmod>2014-12-05T14:50:02-02:00</lastmod>
   </url>
   <url>
-    <loc>http://grossi.io//2012/less-css-app-for-linux</loc>
-    <lastmod>2014-12-04T14:11:12-02:00</lastmod>
+    <loc>http://blog.jgrossi.com//2012/less-css-app-for-linux</loc>
+    <lastmod>2014-12-05T14:50:02-02:00</lastmod>
   </url>
   <url>
-    <loc>http://grossi.io//2012/configuring-a-vps-from-scratch-at-rackspace</loc>
-    <lastmod>2014-12-04T14:12:08-02:00</lastmod>
+    <loc>http://blog.jgrossi.com//2012/configuring-a-vps-from-scratch-at-rackspace</loc>
+    <lastmod>2014-12-05T14:50:02-02:00</lastmod>
   </url>
   <url>
-    <loc>http://grossi.io//2012/secure-file-upload-using-chmod-755</loc>
-    <lastmod>2014-12-04T14:11:41-02:00</lastmod>
+    <loc>http://blog.jgrossi.com//2012/secure-file-upload-using-chmod-755</loc>
+    <lastmod>2014-12-05T14:50:02-02:00</lastmod>
   </url>
   <url>
-    <loc>http://grossi.io//2011/creating-new-zend-framework-project-using-zend-tool</loc>
-    <lastmod>2014-12-04T14:00:47-02:00</lastmod>
+    <loc>http://blog.jgrossi.com//2011/creating-new-zend-framework-project-using-zend-tool</loc>
+    <lastmod>2014-12-05T14:50:02-02:00</lastmod>
   </url>
   <url>
-    <loc>http://grossi.io//2011/pre-and-post-database-operations-with-zend-framework-using-zend-db-table-row</loc>
-    <lastmod>2014-12-04T14:13:49-02:00</lastmod>
+    <loc>http://blog.jgrossi.com//2011/pre-and-post-database-operations-with-zend-framework-using-zend-db-table-row</loc>
+    <lastmod>2014-12-05T14:50:02-02:00</lastmod>
   </url>
   <url>
-    <loc>http://grossi.io//2011/deploying-zend-framework-applications-on-a-shared-host</loc>
-    <lastmod>2014-12-04T14:14:17-02:00</lastmod>
+    <loc>http://blog.jgrossi.com//2011/deploying-zend-framework-applications-on-a-shared-host</loc>
+    <lastmod>2014-12-05T14:50:02-02:00</lastmod>
   </url>
   <url>
-    <loc>http://grossi.io//2011/zend-framework-vs-cakephp-framework</loc>
-    <lastmod>2014-12-04T14:14:28-02:00</lastmod>
+    <loc>http://blog.jgrossi.com//2011/zend-framework-vs-cakephp-framework</loc>
+    <lastmod>2014-12-05T14:50:02-02:00</lastmod>
   </url>
   <url>
-    <loc>http://grossi.io//2011/basic-crud-operations-with-zend-framework</loc>
-    <lastmod>2014-12-04T14:14:35-02:00</lastmod>
+    <loc>http://blog.jgrossi.com//2011/basic-crud-operations-with-zend-framework</loc>
+    <lastmod>2014-12-05T14:50:02-02:00</lastmod>
   </url>
   <url>
-    <loc>http://grossi.io//2011/jquery-form-plugin-does-not-send-xmlhttprequest-value</loc>
-    <lastmod>2014-12-04T14:15:16-02:00</lastmod>
+    <loc>http://blog.jgrossi.com//2011/jquery-form-plugin-does-not-send-xmlhttprequest-value</loc>
+    <lastmod>2014-12-05T14:50:02-02:00</lastmod>
   </url>
   <url>
-    <loc>http://grossi.io//2011/using-live-function-instead-of-bind-with-jquery</loc>
-    <lastmod>2014-12-04T14:14:59-02:00</lastmod>
+    <loc>http://blog.jgrossi.com//2011/using-live-function-instead-of-bind-with-jquery</loc>
+    <lastmod>2014-12-05T14:50:02-02:00</lastmod>
   </url>
   <url>
-    <loc>http://grossi.io//2011/ingles-por-que-nao-portugues</loc>
-    <lastmod>2014-12-04T14:15:43-02:00</lastmod>
+    <loc>http://blog.jgrossi.com//2011/ingles-por-que-nao-portugues</loc>
+    <lastmod>2014-12-05T14:50:02-02:00</lastmod>
   </url>
   <url>
-    <loc>http://grossi.io//2011/redimensionamento-rotacao-e-outros-efeitos-em-imagens-com-php-utilizando-asido</loc>
-    <lastmod>2014-12-04T14:16:42-02:00</lastmod>
+    <loc>http://blog.jgrossi.com//2011/redimensionamento-rotacao-e-outros-efeitos-em-imagens-com-php-utilizando-asido</loc>
+    <lastmod>2014-12-05T14:50:02-02:00</lastmod>
   </url>
   <url>
-    <loc>http://grossi.io//2011/settimeout-para-chamadas-ajax-utilizando-onkeyup-e-jquery</loc>
-    <lastmod>2014-12-04T14:16:20-02:00</lastmod>
+    <loc>http://blog.jgrossi.com//2011/settimeout-para-chamadas-ajax-utilizando-onkeyup-e-jquery</loc>
+    <lastmod>2014-12-05T14:50:02-02:00</lastmod>
   </url>
   <url>
-    <loc>http://grossi.io//2011/utilizando-ajaxcontext-para-chamadas-ajax-com-zend-framework</loc>
-    <lastmod>2014-12-04T14:16:06-02:00</lastmod>
+    <loc>http://blog.jgrossi.com//2011/utilizando-ajaxcontext-para-chamadas-ajax-com-zend-framework</loc>
+    <lastmod>2014-12-05T14:50:02-02:00</lastmod>
   </url>
   <url>
-    <loc>http://grossi.io//2011/traducao-usando-gettext-mo-no-poedit</loc>
-    <lastmod>2014-12-04T14:17:01-02:00</lastmod>
+    <loc>http://blog.jgrossi.com//2011/traducao-usando-gettext-mo-no-poedit</loc>
+    <lastmod>2014-12-05T14:50:02-02:00</lastmod>
   </url>
   <url>
-    <loc>http://grossi.io//2011/primeiro-post-no-blog</loc>
-    <lastmod>2014-12-04T14:17:18-02:00</lastmod>
+    <loc>http://blog.jgrossi.com//2011/primeiro-post-no-blog</loc>
+    <lastmod>2014-12-05T14:50:02-02:00</lastmod>
   </url>
   <url>
-    <loc>http://grossi.io//about/</loc>
-    <lastmod>2015-04-22T10:02:18-03:00</lastmod>
+    <loc>http://blog.jgrossi.com//about/</loc>
+    <lastmod>2015-11-24T18:29:18-02:00</lastmod>
   </url>
   <url>
-    <loc>http://grossi.io//</loc>
-    <lastmod>2015-04-22T10:02:18-03:00</lastmod>
+    <loc>http://blog.jgrossi.com//</loc>
+    <lastmod>2015-11-24T18:29:18-02:00</lastmod>
   </url>
 </urlset>
