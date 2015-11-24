@@ -4,10 +4,10 @@
     <title>Junior Grossi</title>
     <description>This is my blog about web development in general. I write about PHP (Wordpress, Laravel, etc), Ruby (Rails, Jekyll), NodeJS (Socket) and more. Be welcome and let your comment :-)
 </description>
-    <link>http://blog.jgrossi.com//</link>
-    <atom:link href="http://blog.jgrossi.com//feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Tue, 24 Nov 2015 18:29:18 -0200</pubDate>
-    <lastBuildDate>Tue, 24 Nov 2015 18:29:18 -0200</lastBuildDate>
+    <link>http://blog.jgrossi.com/</link>
+    <atom:link href="http://blog.jgrossi.com/feed.xml" rel="self" type="application/rss+xml"/>
+    <pubDate>Tue, 24 Nov 2015 18:31:18 -0200</pubDate>
+    <lastBuildDate>Tue, 24 Nov 2015 18:31:18 -0200</lastBuildDate>
     <generator>Jekyll v2.5.2</generator>
     
       <item>
@@ -105,8 +105,8 @@
 
 </description>
         <pubDate>Fri, 27 Feb 2015 00:00:00 -0300</pubDate>
-        <link>http://blog.jgrossi.com//2015/using-ruby-on-rails-ajax-adapter-with-any-project-even-php-like-laravel</link>
-        <guid isPermaLink="true">http://blog.jgrossi.com//2015/using-ruby-on-rails-ajax-adapter-with-any-project-even-php-like-laravel</guid>
+        <link>http://blog.jgrossi.com/2015/using-ruby-on-rails-ajax-adapter-with-any-project-even-php-like-laravel</link>
+        <guid isPermaLink="true">http://blog.jgrossi.com/2015/using-ruby-on-rails-ajax-adapter-with-any-project-even-php-like-laravel</guid>
         
         
         <category>ruby on rails</category>
@@ -171,8 +171,8 @@
 
 </description>
         <pubDate>Tue, 13 Jan 2015 00:00:00 -0200</pubDate>
-        <link>http://blog.jgrossi.com//2015/why-wordpress-is-your-best-option-for-creating-websites</link>
-        <guid isPermaLink="true">http://blog.jgrossi.com//2015/why-wordpress-is-your-best-option-for-creating-websites</guid>
+        <link>http://blog.jgrossi.com/2015/why-wordpress-is-your-best-option-for-creating-websites</link>
+        <guid isPermaLink="true">http://blog.jgrossi.com/2015/why-wordpress-is-your-best-option-for-creating-websites</guid>
         
         
         <category>php</category>
@@ -338,8 +338,8 @@
 &lt;p&gt;Thank you for reading.&lt;/p&gt;
 </description>
         <pubDate>Sat, 26 Apr 2014 19:53:02 -0300</pubDate>
-        <link>http://blog.jgrossi.com//2014/working-with-laravel-4-and-wordpress-together</link>
-        <guid isPermaLink="true">http://blog.jgrossi.com//2014/working-with-laravel-4-and-wordpress-together</guid>
+        <link>http://blog.jgrossi.com/2014/working-with-laravel-4-and-wordpress-together</link>
+        <guid isPermaLink="true">http://blog.jgrossi.com/2014/working-with-laravel-4-and-wordpress-together</guid>
         
         
         <category>php</category>
@@ -391,8 +391,8 @@
 &lt;p&gt;Be happy!&lt;/p&gt;
 </description>
         <pubDate>Wed, 06 Nov 2013 13:38:10 -0200</pubDate>
-        <link>http://blog.jgrossi.com//2013/generating-ids-like-youtube-or-bit-ly-using-php</link>
-        <guid isPermaLink="true">http://blog.jgrossi.com//2013/generating-ids-like-youtube-or-bit-ly-using-php</guid>
+        <link>http://blog.jgrossi.com/2013/generating-ids-like-youtube-or-bit-ly-using-php</link>
+        <guid isPermaLink="true">http://blog.jgrossi.com/2013/generating-ids-like-youtube-or-bit-ly-using-php</guid>
         
         
         <category>php</category>
@@ -508,8 +508,8 @@
 &lt;p&gt;Now you will have all files you specified inside the MANIFEST file minified and being managed by the package. Now, you can do the same for CSS files. The package has more options like cache, etc. You can check the package&#39;s configuration file and found more details there. Be happy!&lt;/p&gt;
 </description>
         <pubDate>Mon, 04 Nov 2013 16:52:52 -0200</pubDate>
-        <link>http://blog.jgrossi.com//2013/managing-assets-with-laravel-4</link>
-        <guid isPermaLink="true">http://blog.jgrossi.com//2013/managing-assets-with-laravel-4</guid>
+        <link>http://blog.jgrossi.com/2013/managing-assets-with-laravel-4</link>
+        <guid isPermaLink="true">http://blog.jgrossi.com/2013/managing-assets-with-laravel-4</guid>
         
         
         <category>php</category>
@@ -544,8 +544,8 @@
 &lt;p&gt;Laravel 4 does the rest for you. Now everything will work and you won&#39;t have problem with routes. Continue to develop your app!&lt;/p&gt;
 </description>
         <pubDate>Sun, 13 Oct 2013 23:57:45 -0300</pubDate>
-        <link>http://blog.jgrossi.com//2013/working-with-php-5-4-built-in-server-with-laravel-4</link>
-        <guid isPermaLink="true">http://blog.jgrossi.com//2013/working-with-php-5-4-built-in-server-with-laravel-4</guid>
+        <link>http://blog.jgrossi.com/2013/working-with-php-5-4-built-in-server-with-laravel-4</link>
+        <guid isPermaLink="true">http://blog.jgrossi.com/2013/working-with-php-5-4-built-in-server-with-laravel-4</guid>
         
         
         <category>php</category>
@@ -614,8 +614,8 @@
 &lt;/ul&gt;
 </description>
         <pubDate>Wed, 25 Sep 2013 19:55:24 -0300</pubDate>
-        <link>http://blog.jgrossi.com//2013/be-a-better-php-developer</link>
-        <guid isPermaLink="true">http://blog.jgrossi.com//2013/be-a-better-php-developer</guid>
+        <link>http://blog.jgrossi.com/2013/be-a-better-php-developer</link>
+        <guid isPermaLink="true">http://blog.jgrossi.com/2013/be-a-better-php-developer</guid>
         
         
         <category>php</category>
@@ -634,8 +634,8 @@
 &lt;p&gt;Best regards. Be happy.&lt;/p&gt;
 </description>
         <pubDate>Wed, 18 Sep 2013 16:56:39 -0300</pubDate>
-        <link>http://blog.jgrossi.com//2013/solve-the-problem-just-it</link>
-        <guid isPermaLink="true">http://blog.jgrossi.com//2013/solve-the-problem-just-it</guid>
+        <link>http://blog.jgrossi.com/2013/solve-the-problem-just-it</link>
+        <guid isPermaLink="true">http://blog.jgrossi.com/2013/solve-the-problem-just-it</guid>
         
         
         <category>php</category>
@@ -813,8 +813,8 @@
 &lt;p&gt;Thanks for reading!&lt;/p&gt;
 </description>
         <pubDate>Mon, 24 Jun 2013 03:08:29 -0300</pubDate>
-        <link>http://blog.jgrossi.com//2013/design-patterns-with-php-adapters</link>
-        <guid isPermaLink="true">http://blog.jgrossi.com//2013/design-patterns-with-php-adapters</guid>
+        <link>http://blog.jgrossi.com/2013/design-patterns-with-php-adapters</link>
+        <guid isPermaLink="true">http://blog.jgrossi.com/2013/design-patterns-with-php-adapters</guid>
         
         
         <category>php</category>
@@ -861,8 +861,8 @@
 &lt;p&gt;When you want, just commit, push your package to GitHub and share!&lt;/p&gt;
 </description>
         <pubDate>Fri, 21 Jun 2013 15:15:19 -0300</pubDate>
-        <link>http://blog.jgrossi.com//2013/testing-your-packagistcomposer-package-locally</link>
-        <guid isPermaLink="true">http://blog.jgrossi.com//2013/testing-your-packagistcomposer-package-locally</guid>
+        <link>http://blog.jgrossi.com/2013/testing-your-packagistcomposer-package-locally</link>
+        <guid isPermaLink="true">http://blog.jgrossi.com/2013/testing-your-packagistcomposer-package-locally</guid>
         
         
         <category>php</category>
