@@ -1,4 +1,3 @@
-# robots.txt generated at http://www.mcanerin.com
 User-agent: *
 Disallow: 
-Sitemap: http://grossi.io/sitemap.xml
+Sitemap: http://blog.jgrossi.com/sitemap.xml
